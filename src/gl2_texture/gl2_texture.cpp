@@ -65,7 +65,7 @@ public:
    */
   TextureWindow() : Window{"gl2_texture", SIZE, SIZE} {
     // Load the image from file
-    loadImage("lena.raw", SIZE, SIZE);
+    loadImage("result.raw", SIZE, SIZE);
 
     // Set the program uniform input "Texture" to the loaded data
     auto texture_attrib = program.getUniformLocation("Texture");
@@ -92,7 +92,7 @@ public:
   /*!
    * Window refresh implementation that will be called automatically from pollEvents when needed
    */
-  void onRefresh() override {
+  void onIdle() override {
     // Set gray background
     glClearColor(.5f, .5f, .5f, 0);
 
