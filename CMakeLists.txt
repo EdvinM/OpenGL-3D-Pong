@@ -176,6 +176,21 @@ add_executable(gl9_scene
 target_link_libraries(gl9_scene ppgso shaders)
 install(TARGETS gl9_scene DESTINATION .)
 
+# pong
+add_executable(pong
+        src/pong/gl9_scene.cpp
+        src/pong/object.cpp
+        src/pong/scene.cpp
+        src/pong/camera.cpp
+        src/pong/asteroid.cpp
+        src/pong/generator.cpp
+        src/pong/player.cpp
+        src/pong/projectile.cpp
+        src/pong/explosion.cpp
+        src/pong/space.cpp)
+target_link_libraries(pong ppgso shaders)
+install(TARGETS pong DESTINATION .)
+
 # Playground target
 add_executable(playground src/playground/playground.cpp)
 target_link_libraries(playground ppgso shaders)
