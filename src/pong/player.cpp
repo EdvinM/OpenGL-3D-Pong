@@ -26,6 +26,11 @@ Player::Player() {
   if (!mesh) mesh = make_unique<Mesh>("corsair.obj");
 }
 
+Player::Player(int control_up, int control_down) : Player() {
+  this->control_up    = control_up;
+  this->control_down  = control_down;
+}
+
 bool Player::update(Scene &scene, float dt) {
   // Fire delay increment
   fireDelay += dt;
@@ -53,11 +58,11 @@ bool Player::update(Scene &scene, float dt) {
   }
 
   // Keyboard controls
-  if(scene.keyboard[GLFW_KEY_LEFT]) {
-    position.x += 10 * dt;
+  if(scene.keyboard[this->control_up]) {
+    position.y += 10 * dt;
     rotation.z = -PI/4.0f;
-  } else if(scene.keyboard[GLFW_KEY_RIGHT]) {
-    position.x -= 10 * dt;
+  } else if(scene.keyboard[this->control_down]) {
+    position.y -= 10 * dt;
     rotation.z = PI/4.0f;
   } else {
     rotation.z = 0;

@@ -20,11 +20,15 @@ private:
   float fireRate{0.1f};
   glm::vec3 fireOffset{0.7f,0.0f,0.0f};
 
+  int control_up;
+  int control_down;
+
 public:
   /*!
    * Create a new player
    */
   Player();
+  Player(int control_up, int control_down);
 
   /*!
    * Update player position considering keyboard inputs

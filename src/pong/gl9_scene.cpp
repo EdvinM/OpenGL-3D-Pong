@@ -48,14 +48,20 @@ private:
     scene.objects.push_back(make_unique<Space>());
 
     // Add generator to scene
-    auto generator = make_unique<Generator>();
-    generator->position.y = 10.0f;
-    scene.objects.push_back(move(generator));
+//    auto generator = make_unique<Generator>();
+//    generator->position.y = 10.0f;
+//    scene.objects.push_back(move(generator));
 
     // Add player to the scene
-    auto player = make_unique<Player>();
-    player->position.y = -6;
-    scene.objects.push_back(move(player));
+    auto player1 = make_unique<Player>(GLFW_KEY_W, GLFW_KEY_S);
+    player1->position.y = -6;
+    player1->position.x = 8;
+    scene.objects.push_back(move(player1));
+
+    auto player2 = make_unique<Player>(GLFW_KEY_UP, GLFW_KEY_DOWN);
+    player2->position.y = -6;
+    player2->position.x = -8;
+    scene.objects.push_back(move(player2));
   }
 
 public:
