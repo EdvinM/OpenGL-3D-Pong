@@ -18,7 +18,7 @@ unique_ptr<Shader> Asteroid::shader;
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
   scale *= linearRand(1.0f, 3.0f);
-  speed = {linearRand(-2.0f, 2.0f), linearRand(-5.0f, -10.0f), 0.0f};
+  speed = {linearRand(8.0f, 10.0f), linearRand(-8.0f, -10.0f), 0.0f};
   rotation = ballRand(PI);
   rotMomentum = ballRand(PI);
 
@@ -39,7 +39,17 @@ bool Asteroid::update(Scene &scene, float dt) {
   rotation += rotMomentum * dt;
 
   // Delete when alive longer than 10s or out of visibility
-  if (age > 10.0f || position.y < -10) return false;
+  if (position.y < -12)
+      speed.y *= (-1);
+
+  if(position.y > 12)
+      speed.y *= (-1);
+
+    if (position.x < -12)
+        speed.x *= (-1);
+
+    if(position.x > 12)
+        speed.x *= (-1);
 
   // Collide with scene
   for (auto &obj : scene.objects) {
@@ -50,10 +60,6 @@ bool Asteroid::update(Scene &scene, float dt) {
     auto asteroid = dynamic_cast<Asteroid*>(obj.get()); // dynamic_pointer_cast<Asteroid>(obj);
     auto projectile = dynamic_cast<Projectile*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
     if (!asteroid && !projectile) continue;
-
-    // When colliding with other asteroids make sure the object is older than .5s
-    // This prevents excessive collisions when asteroids explode.
-    if (asteroid && age < 0.5f) continue;
 
     // Compare distance to approximate size of the asteroid estimated from scale.
     if (distance(position, obj->position) < (obj->scale.y + scale.y) * 0.7f) {

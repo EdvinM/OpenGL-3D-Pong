@@ -23,7 +23,6 @@ private:
   float age{0.0f};
 
   // Speed and rotational momentum
-  glm::vec3 speed;
   glm::vec3 rotMomentum;
 
   /*!
@@ -60,6 +59,8 @@ public:
    * Custom click event for asteroid
    */
   void onClick(Scene &scene) override;
+
+    glm::vec3 speed;
 
 private:
 };

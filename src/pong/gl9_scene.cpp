@@ -17,6 +17,7 @@
 #include "generator.h"
 #include "player.h"
 #include "space.h"
+#include "asteroid.h"
 
 using namespace std;
 using namespace glm;
@@ -61,6 +62,11 @@ private:
     auto player2 = make_unique<Player>(GLFW_KEY_UP, GLFW_KEY_DOWN);
     player2->position.x = -10;
     scene.objects.push_back(move(player2));
+
+    auto obj = make_unique<Asteroid>();
+    obj->position.x = 0.0f;
+    obj->position.y = 0.0f;
+    scene.objects.push_back(move(obj));
   }
 
 public:

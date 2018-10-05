@@ -47,13 +47,12 @@ bool Player::update(Scene &scene, float dt) {
 
     if (distance(position, asteroid->position) < asteroid->scale.y) {
       // Explode
-      auto explosion = make_unique<Explosion>();
-      explosion->position = position;
-      explosion->scale = scale * 3.0f;
-      scene.objects.push_back(move(explosion));
+//      auto explosion = make_unique<Explosion>();
+//      explosion->position = position;
+//      explosion->scale = scale * 3.0f;
+//      scene.objects.push_back(move(explosion));
 
-      // Die
-      return false;
+    asteroid->speed.x *= (-1);
     }
   }
 
