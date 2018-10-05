@@ -55,13 +55,11 @@ private:
 
     // Add player to the scene
     auto player1 = make_unique<Player>(GLFW_KEY_W, GLFW_KEY_S);
-    player1->position.y = -6;
-    player1->position.x = 8;
+    player1->position.x = 10;
     scene.objects.push_back(move(player1));
 
     auto player2 = make_unique<Player>(GLFW_KEY_UP, GLFW_KEY_DOWN);
-    player2->position.y = -6;
-    player2->position.x = -8;
+    player2->position.x = -10;
     scene.objects.push_back(move(player2));
   }
 
