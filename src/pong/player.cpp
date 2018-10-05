@@ -60,10 +60,10 @@ bool Player::update(Scene &scene, float dt) {
   // Keyboard controls
   if(scene.keyboard[this->control_up]) {
     position.y += 10 * dt;
-    rotation.z = -PI/4.0f;
+    //rotation.z = -PI/4.0f;
   } else if(scene.keyboard[this->control_down]) {
     position.y -= 10 * dt;
-    rotation.z = PI/4.0f;
+    //rotation.z = PI/4.0f;
   } else {
     rotation.z = 0;
   }

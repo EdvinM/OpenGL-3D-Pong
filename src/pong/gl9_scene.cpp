@@ -22,7 +22,8 @@ using namespace std;
 using namespace glm;
 using namespace ppgso;
 
-const unsigned int SIZE = 512;
+const unsigned int WIDTH = 1280;
+const unsigned int HEIGHT = 720;
 
 /*!
  * Custom windows for our simple game
@@ -41,7 +42,7 @@ private:
 
     // Create a camera
     auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
-    camera->position.z = -15.0f;
+    camera->position.z = -23.0f;
     scene.camera = move(camera);
 
     // Add space background
@@ -68,7 +69,7 @@ public:
   /*!
    * Construct custom game window
    */
-  SceneWindow() : Window{"gl9_scene", SIZE, SIZE} {
+  SceneWindow() : Window{"gl9_scene", WIDTH, HEIGHT} {
     //hideCursor();
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
