@@ -58,14 +58,10 @@ bool Player::update(Scene &scene, float dt) {
   }
 
   // Keyboard controls
-  if(scene.keyboard[this->control_up]) {
+  if(scene.keyboard[this->control_up] && (position.y * 100) <= 1280 - (texture->image.height / 3)) {
     position.y += 10 * dt;
-    //rotation.z = -PI/4.0f;
-  } else if(scene.keyboard[this->control_down]) {
+  } else if(scene.keyboard[this->control_down] && (position.y * 100) > -1280 + (texture->image.height / 3)) {
     position.y -= 10 * dt;
-    //rotation.z = PI/4.0f;
-  } else {
-    rotation.z = 0;
   }
 
   // Firing projectiles
