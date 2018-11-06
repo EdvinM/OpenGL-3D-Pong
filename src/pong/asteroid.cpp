@@ -2,6 +2,7 @@
 #include "asteroid.h"
 #include "projectile.h"
 #include "explosion.h"
+#include "player.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -59,23 +60,14 @@ bool Asteroid::update(Scene &scene, float dt) {
     // We only need to collide with asteroids and projectiles, ignore other objects
     auto asteroid = dynamic_cast<Asteroid*>(obj.get()); // dynamic_pointer_cast<Asteroid>(obj);
     auto projectile = dynamic_cast<Projectile*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
-    if (!asteroid && !projectile) continue;
+    auto player = dynamic_cast<Player*>(obj.get());
+    if (!asteroid && !projectile && !player) continue;
 
-    // Compare distance to approximate size of the asteroid estimated from scale.
-    if (distance(position, obj->position) < (obj->scale.y + scale.y) * 0.7f) {
-      int pieces = 3;
-
-      // Too small to split into pieces
-      if (scale.y < 0.5) pieces = 0;
-
-      // The projectile will be destroyed
-      if (projectile) projectile->destroy();
-
-      // Generate smaller asteroids
-      explode(scene, (obj->position + position) / 2.0f, (obj->scale + scale) / 2.0f, pieces);
-
-      // Destroy self
-      return false;
+    if (distance(position, player->position) < player->scale.x) {
+      speed.x *= (-1);
+    }
+    else if (distance(position, player->position) < player->scale.y) {
+      speed.y *= (-1);
     }
   }
 

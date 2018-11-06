@@ -26,35 +26,16 @@ Player::Player() {
   if (!mesh) mesh = make_unique<Mesh>("corsair.obj");
 }
 
-Player::Player(int control_up, int control_down) : Player() {
+Player::Player(int control_up, int control_down, int id) : Player() {
   this->control_up    = control_up;
   this->control_down  = control_down;
+  this->CanCollide    = true;
+  this->id            = id;
 }
 
 bool Player::update(Scene &scene, float dt) {
   // Fire delay increment
   fireDelay += dt;
-
-  // Hit detection
-  for ( auto& obj : scene.objects ) {
-    // Ignore self in scene
-    if (obj.get() == this)
-      continue;
-
-    // We only need to collide with asteroids, ignore other objects
-    auto asteroid = dynamic_cast<Asteroid*>(obj.get());
-    if (!asteroid) continue;
-
-    if (distance(position, asteroid->position) < asteroid->scale.y) {
-      // Explode
-//      auto explosion = make_unique<Explosion>();
-//      explosion->position = position;
-//      explosion->scale = scale * 3.0f;
-//      scene.objects.push_back(move(explosion));
-
-    asteroid->speed.x *= (-1);
-    }
-  }
 
   // Keyboard controls
   if(scene.keyboard[this->control_up] && (position.y * 100) <= 1280 - (texture->image.height / 3)) {

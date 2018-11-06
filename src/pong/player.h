@@ -28,7 +28,7 @@ public:
    * Create a new player
    */
   Player();
-  Player(int control_up, int control_down);
+  Player(int control_up, int control_down, int id);
 
   /*!
    * Update player position considering keyboard inputs
@@ -50,5 +50,8 @@ public:
    * @param scene
    */
   void onClick(Scene &scene) override ;
+
+  bool CanCollide;
+  int id;
 };
 

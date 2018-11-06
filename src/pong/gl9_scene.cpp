@@ -42,24 +42,25 @@ private:
     scene.objects.clear();
 
     // Create a camera
-    auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
-    camera->position.z = -23.0f;
+    auto camera = make_unique<Camera>(90.0f, 1.0f, 0.1f, 100.0f);
+    camera->position.z = -25.0f;
     scene.camera = move(camera);
 
     // Add space background
-    scene.objects.push_back(make_unique<Space>());
-
-    // Add generator to scene
-//    auto generator = make_unique<Generator>();
-//    generator->position.y = 10.0f;
-//    scene.objects.push_back(move(generator));
+    auto space = make_unique<Space>();
+    space->position.x = 0;
+    space->position.y = 0;
+    space->rotation.x = 90.0f;
+    //space->rotation.z = 90.0f;
+    //space->rotation.y = 110.0f;
+    scene.objects.push_back(move(space));
 
     // Add player to the scene
-    auto player1 = make_unique<Player>(GLFW_KEY_W, GLFW_KEY_S);
+    auto player1 = make_unique<Player>(GLFW_KEY_W, GLFW_KEY_S, 1);
     player1->position.x = 10;
     scene.objects.push_back(move(player1));
 
-    auto player2 = make_unique<Player>(GLFW_KEY_UP, GLFW_KEY_DOWN);
+    auto player2 = make_unique<Player>(GLFW_KEY_UP, GLFW_KEY_DOWN, 2);
     player2->position.x = -10;
     scene.objects.push_back(move(player2));
 
@@ -129,6 +130,7 @@ public:
    */
   void onMouseButton(int button, int action, int mods) override {
     if(button == GLFW_MOUSE_BUTTON_LEFT) {
+
       scene.cursor.left = action == GLFW_PRESS;
 
       if (scene.cursor.left) {
