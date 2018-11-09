@@ -54,7 +54,7 @@ bool Asteroid::update(Scene &scene, float dt) {
   if(position.y >= (Scene::WIDTH / 100.0)) {
     x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - position.y + 0.01);
 
-    if(speed.y > 0)
+    if(speed.y < 0)
       x_deviation_value *= -1;
 
     speed.y *= (-1);
@@ -74,7 +74,7 @@ bool Asteroid::update(Scene &scene, float dt) {
   if(position.x >= (Scene::WIDTH / 100.0)) {
     x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - position.x + 0.01);
 
-    if(speed.x > 0)
+    if(speed.x < 0)
       x_deviation_value *= -1;
 
     speed.x *= (-1);
