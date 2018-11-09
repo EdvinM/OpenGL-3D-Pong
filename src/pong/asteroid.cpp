@@ -18,7 +18,6 @@ unique_ptr<Shader> Asteroid::shader;
 
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
-  scale *= 1.0f;
   speed = {linearRand(8.0f, 10.0f), linearRand(-8.0f, -10.0f), 0.0f};
   rotation = ballRand(PI);
   rotMomentum = ballRand(PI);

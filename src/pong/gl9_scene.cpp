@@ -14,10 +14,10 @@
 
 #include "camera.h"
 #include "scene.h"
-#include "generator.h"
 #include "player.h"
 #include "space.h"
 #include "asteroid.h"
+#include "border.h"
 
 using namespace std;
 using namespace glm;
@@ -65,6 +65,16 @@ private:
     obj->position.x = 0.0f;
     obj->position.y = 0.0f;
     scene.objects.push_back(move(obj));
+
+    auto border_top = make_unique<border>();
+    border_top->position.y = static_cast<float>(Scene::WIDTH / 100.0);
+    border_top->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
+    scene.objects.push_back(move(border_top));
+
+    auto border_bottom = make_unique<border>();
+      border_bottom->position.y = -static_cast<float>(Scene::WIDTH / 100.0);
+      border_bottom->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
+    scene.objects.push_back(move(border_bottom));
   }
 
 public:

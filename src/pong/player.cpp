@@ -18,12 +18,12 @@ unique_ptr<Shader> Player::shader;
 
 Player::Player() {
   // Scale the default model
-  scale *= 3.0f;
+  scale.y *= 3.0f;
 
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!texture) texture = make_unique<Texture>(image::loadBMP("corsair.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("corsair.obj");
+  if (!mesh) mesh = make_unique<Mesh>("paddle.obj");
 }
 
 Player::Player(int control_up, int control_down, int id) : Player() {
@@ -42,18 +42,6 @@ bool Player::update(Scene &scene, float dt) {
     position.y += 10 * dt;
   } else if(scene.keyboard[this->control_down] && (position.y * 100) > -1280 + (texture->image.height / 3)) {
     position.y -= 10 * dt;
-  }
-
-  // Firing projectiles
-  if(scene.keyboard[GLFW_KEY_SPACE] && fireDelay > fireRate) {
-    // Reset fire delay
-    fireDelay = 0;
-    // Invert file offset
-    fireOffset = -fireOffset;
-
-    auto projectile = make_unique<Projectile>();
-    projectile->position = position + glm::vec3(0.0f, 0.0f, 0.3f) + fireOffset;
-    scene.objects.push_back(move(projectile));
   }
 
   generateModelMatrix();
