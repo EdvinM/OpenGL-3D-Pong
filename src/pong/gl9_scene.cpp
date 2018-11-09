@@ -23,9 +23,6 @@ using namespace std;
 using namespace glm;
 using namespace ppgso;
 
-const unsigned int WIDTH = 1280;
-const unsigned int HEIGHT = 720;
-
 /*!
  * Custom windows for our simple game
  */
@@ -57,11 +54,11 @@ private:
 
     // Add player to the scene
     auto player1 = make_unique<Player>(GLFW_KEY_W, GLFW_KEY_S, 1);
-    player1->position.x = 10;
+    player1->position.x = 12;
     scene.objects.push_back(move(player1));
 
     auto player2 = make_unique<Player>(GLFW_KEY_UP, GLFW_KEY_DOWN, 2);
-    player2->position.x = -10;
+    player2->position.x = -12;
     scene.objects.push_back(move(player2));
 
     auto obj = make_unique<Asteroid>();
@@ -74,7 +71,7 @@ public:
   /*!
    * Construct custom game window
    */
-  SceneWindow() : Window{"gl9_scene", WIDTH, HEIGHT} {
+  SceneWindow() : Window{"gl9_scene", Scene::WIDTH, Scene::HEIGHT} {
     //hideCursor();
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 

@@ -39,18 +39,47 @@ bool Asteroid::update(Scene &scene, float dt) {
   // Rotate the object
   rotation += rotMomentum * dt;
 
-  // Delete when alive longer than 10s or out of visibility
-  if (position.y < -12)
-      speed.y *= (-1);
+  float x_deviation_value = 0;
 
-  if(position.y > 12)
-      speed.y *= (-1);
+  if (position.y <= -(Scene::WIDTH / 100.0)) {
+    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) + position.y + 0.01);
 
-    if (position.x < -12)
-        speed.x *= (-1);
+    if(speed.y < 0)
+      x_deviation_value *= -1;
 
-    if(position.x > 12)
-        speed.x *= (-1);
+    speed.y *= (-1);
+    position.y += x_deviation_value;
+  }
+
+  if(position.y >= (Scene::WIDTH / 100.0)) {
+    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - position.y + 0.01);
+
+    if(speed.y > 0)
+      x_deviation_value *= -1;
+
+    speed.y *= (-1);
+    position.y += x_deviation_value;
+  }
+
+  if (position.x <= -(Scene::WIDTH / 100.0)) {
+    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) + position.x + 0.01);
+
+    if(speed.x < 0)
+      x_deviation_value *= -1;
+
+    speed.x *= (-1);
+    position.x += x_deviation_value;
+  }
+
+  if(position.x >= (Scene::WIDTH / 100.0)) {
+    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - position.x + 0.01);
+
+    if(speed.x > 0)
+      x_deviation_value *= -1;
+
+    speed.x *= (-1);
+    position.x += x_deviation_value;
+  }
 
   // Collide with scene
   for (auto &obj : scene.objects) {
@@ -64,7 +93,7 @@ bool Asteroid::update(Scene &scene, float dt) {
     if (!asteroid && !projectile && !player) continue;
 
     if (distance(position, player->position) <= player->scale.x) {
-      float x_deviation_value = (player->scale.x - (distance(position, player->position))) + 0.01;
+      x_deviation_value = (player->scale.x - (distance(position, player->position))) + 0.01;
       if(speed.x > 0)
         x_deviation_value *= -1;
 
