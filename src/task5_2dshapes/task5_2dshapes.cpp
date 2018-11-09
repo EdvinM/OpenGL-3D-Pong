@@ -106,7 +106,7 @@ public:
   // Set the object transformation matrix
   void update() {
     // TODO: Compute transformation by scaling, rotating and then translating the shape
-    modelMatrix = translate(mat4{1}, position) * rotate(mat4{1}, rotation.z, vec3{0,0,1}) * glm::scale(mat4{1}, scale);
+    modelMatrix = translate(mat4{1}, position)  * rotate(mat4{1}, rotation.z, vec3{0,0,1}) * glm::scale(mat4{1}, scale);
   }
 
   // Draw polygons
@@ -148,6 +148,7 @@ public:
     // Manipulate shape size
     shape1.scale = {abs(cos(t)),abs(cos(t)), 1};
     shape2.scale = {0.3, 0.3, 0};
+
     shape3.scale = {0.3, 0.3, 0};
 
     shape3.rotation.z = t * 6.0f;
