@@ -56,10 +56,8 @@ private:
     player2->position.x = -12;
     scene.objects.push_back(move(player2));
 
-    auto obj = make_unique<Asteroid>();
-    obj->position.x = 0.0f;
-    obj->position.y = 0.0f;
-    scene.objects.push_back(move(obj));
+    //Add ball to the game
+    scene.objects.push_back(make_unique<Asteroid>());
 
     auto border_top = make_unique<border>();
     border_top->position.y = static_cast<float>(Scene::WIDTH / 100.0);

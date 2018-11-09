@@ -16,7 +16,20 @@ unique_ptr<Shader> Asteroid::shader;
 
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
-  speed = {linearRand(8.0f, 10.0f), linearRand(-8.0f, -10.0f), 0.0f};
+  speed = {linearRand(8.0f, 10.0f), linearRand(8.0f, 10.0f), 0.0f};
+
+  //Needed to give some randomness for our ball for the moving position
+  if(rand() % 2 == 0) {
+    speed.x *= -1;
+  }
+
+  if(rand() % 2 == 1) {
+    speed.y *= -1;
+  }
+
+  cout << "Asteroid x= " << speed.x << endl;
+  cout << "Asteroid y= " << speed.y << endl;
+
   rotation = ballRand(PI);
   rotMomentum = ballRand(PI);
 

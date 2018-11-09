@@ -18,6 +18,8 @@ class Scene {
     const static unsigned int WIDTH = 1280;
     const static unsigned int HEIGHT = 720;
 
+    Scene();
+
     /*!
      * Update all objects in the scene
      * @param time

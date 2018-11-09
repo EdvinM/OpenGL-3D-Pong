@@ -1,4 +1,9 @@
 #include "scene.h"
+#include <time.h>
+
+Scene::Scene() {
+  srand (time(NULL));
+}
 
 void Scene::update(float time) {
   camera->update();
