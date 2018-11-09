@@ -58,16 +58,18 @@ bool Asteroid::update(Scene &scene, float dt) {
     if (obj.get() == this) continue;
 
     // We only need to collide with asteroids and projectiles, ignore other objects
-    auto asteroid = dynamic_cast<Asteroid*>(obj.get()); // dynamic_pointer_cast<Asteroid>(obj);
-    auto projectile = dynamic_cast<Projectile*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
+    auto asteroid = dynamic_cast<Asteroid*>(obj.get());
+    auto projectile = dynamic_cast<Projectile*>(obj.get());
     auto player = dynamic_cast<Player*>(obj.get());
     if (!asteroid && !projectile && !player) continue;
 
-    if (distance(position, player->position) < player->scale.x) {
+    if (distance(position, player->position) <= player->scale.x) {
+      float x_deviation_value = (player->scale.x - (distance(position, player->position))) + 0.01;
+      if(speed.x > 0)
+        x_deviation_value *= -1;
+
       speed.x *= (-1);
-    }
-    else if (distance(position, player->position) < player->scale.y) {
-      speed.y *= (-1);
+      position.x += x_deviation_value;
     }
   }
 
