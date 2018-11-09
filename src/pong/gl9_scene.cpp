@@ -18,6 +18,7 @@
 #include "space.h"
 #include "asteroid.h"
 #include "border.h"
+#include "Floor.h"
 
 using namespace std;
 using namespace glm;
@@ -75,6 +76,14 @@ private:
     border_bottom->position.y = -static_cast<float>(Scene::WIDTH / 100.0);
     border_bottom->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
     scene.objects.push_back(move(border_bottom));
+
+    auto floor = make_unique<Floor>();
+    floor->position.z = 2.0f;
+    floor->position.x = 0;
+    floor->position.y = static_cast<float>(Scene::WIDTH / 100.0);
+    floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
+    floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
+    scene.objects.push_back(move(floor));
   }
 
 public:
