@@ -18,15 +18,15 @@ unique_ptr<Shader> Asteroid::shader;
 
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
-  scale *= linearRand(1.0f, 3.0f);
+  scale *= 1.0f;
   speed = {linearRand(8.0f, 10.0f), linearRand(-8.0f, -10.0f), 0.0f};
   rotation = ballRand(PI);
   rotMomentum = ballRand(PI);
 
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-  if (!texture) texture = make_unique<Texture>(image::loadBMP("asteroid.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("asteroid.obj");
+  if (!texture) texture = make_unique<Texture>(image::loadBMP("sphere.bmp"));
+  if (!mesh) mesh = make_unique<Mesh>("sphere.obj");
 }
 
 bool Asteroid::update(Scene &scene, float dt) {
@@ -41,6 +41,7 @@ bool Asteroid::update(Scene &scene, float dt) {
 
   float x_deviation_value = 0;
 
+  //Check for collision with screen boundaries
   if (position.y <= -(Scene::WIDTH / 100.0)) {
     x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) + position.y + 0.01);
 
@@ -108,26 +109,6 @@ bool Asteroid::update(Scene &scene, float dt) {
   return true;
 }
 
-void Asteroid::explode(Scene &scene, vec3 explosionPosition, vec3 explosionScale, int pieces) {
-  // Generate explosion
-  auto explosion = make_unique<Explosion>();
-  explosion->position = explosionPosition;
-  explosion->scale = explosionScale;
-  explosion->speed = speed / 2.0f;
-  scene.objects.push_back(move(explosion));
-
-  // Generate smaller asteroids
-  for (int i = 0; i < pieces; i++) {
-    auto asteroid = make_unique<Asteroid>();
-    asteroid->speed = speed + vec3(linearRand(-3.0f, 3.0f), linearRand(0.0f, -5.0f), 0.0f);;
-    asteroid->position = position;
-    asteroid->rotMomentum = rotMomentum;
-    float factor = (float) pieces / 2.0f;
-    asteroid->scale = scale / factor;
-    scene.objects.push_back(move(asteroid));
-  }
-}
-
 void Asteroid::render(Scene &scene) {
   shader->use();
 
@@ -146,7 +127,6 @@ void Asteroid::render(Scene &scene) {
 
 void Asteroid::onClick(Scene &scene) {
   cout << "Asteroid clicked!" << endl;
-  explode(scene, position, {10.0f, 10.0f, 10.0f}, 0 );
   age = 10000;
 }
 

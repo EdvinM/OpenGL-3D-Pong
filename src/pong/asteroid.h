@@ -25,16 +25,6 @@ private:
   // Speed and rotational momentum
   glm::vec3 rotMomentum;
 
-  /*!
-   * Split the asteroid into multiple pieces and spawn an explosion object.
-   *
-   * @param scene - Scene to place pieces and explosion into
-   * @param explosionPosition - Initial position of the explosion
-   * @param explosionScale - Scale of the explosion
-   * @param pieces - Asteroid pieces to generate
-   */
-  void explode(Scene &scene, glm::vec3 explosionPosition, glm::vec3 explosionScale, int pieces);
-
 public:
   /*!
    * Create new asteroid
