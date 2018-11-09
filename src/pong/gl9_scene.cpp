@@ -44,14 +44,8 @@ private:
     camera->position.z = -30.0f;
     scene.camera = move(camera);
 
-    // Add space background
-    auto space = make_unique<Space>();
-    space->position.x = 0;
-    space->position.y = 0;
-    space->rotation.x = 90.0f;
-    //space->rotation.z = 90.0f;
-    //space->rotation.y = 110.0f;
-    //scene.objects.push_back(move(space));
+    //Add background
+    scene.objects.push_back(make_unique<Space>());
 
     // Add player to the scene
     auto player1 = make_unique<Player>(GLFW_KEY_W, GLFW_KEY_S, 1);

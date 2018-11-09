@@ -9,8 +9,6 @@ using namespace glm;
 using namespace ppgso;
 
 Space::Space() {
-
-  scale *= 10.0f;
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(texture_vert_glsl, texture_frag_glsl);
   if (!texture) texture = make_unique<Texture>(image::loadBMP("stars.bmp"));
@@ -19,26 +17,30 @@ Space::Space() {
 
 bool Space::update(Scene &scene, float dt) {
   // Offset for UV mapping, creates illusion of scrolling
-  //textureOffset.y -= dt/5;
+  textureOffset.y -= dt/5;
 
   generateModelMatrix();
   return true;
 }
 
 void Space::render(Scene &scene) {
+  // Disable writing to the depth buffer so we render a "background"
+  glDepthMask(GL_FALSE);
+
+  // NOTE: this object does not use camera, just renders the entire quad as is
   shader->use();
 
-  // Set up light
-  shader->setUniform("LightDirection", scene.lightDirection);
+  // Pass UV mapping offset to the shader
+  shader->setUniform("TextureOffset", textureOffset);
 
-  // use camera
-  shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-  shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-
-  // render mesh
+  // Render mesh, not using any projections, we just render in 2D
   shader->setUniform("ModelMatrix", modelMatrix);
+  shader->setUniform("ViewMatrix", mat4{1.0f});
+  shader->setUniform("ProjectionMatrix", mat4{1.0f});
   shader->setUniform("Texture", *texture);
   mesh->render();
+
+  glDepthMask(GL_TRUE);
 }
 
 // shared resources
