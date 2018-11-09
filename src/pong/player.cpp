@@ -1,8 +1,8 @@
+#include <glm/gtc/random.hpp>
 #include "player.h"
 #include "scene.h"
 #include "asteroid.h"
-#include "projectile.h"
-#include "explosion.h"
+#include "border.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -29,8 +29,6 @@ Player::Player() {
 Player::Player(int control_up, int control_down, int id) : Player() {
   this->control_up    = control_up;
   this->control_down  = control_down;
-  this->CanCollide    = true;
-  this->id            = id;
 }
 
 bool Player::update(Scene &scene, float dt) {
@@ -42,6 +40,20 @@ bool Player::update(Scene &scene, float dt) {
     position.y += 10 * dt;
   } else if(scene.keyboard[this->control_down] && (position.y * 100) > -1280 + (texture->image.height / 3)) {
     position.y -= 10 * dt;
+  }
+
+  for (auto &obj : scene.objects) {
+    // Ignore self in scene
+    if (obj.get() == this) continue;
+
+    auto Border = dynamic_cast<border*>(obj.get());
+
+    if(!Border) continue;
+
+    //cout << << endl;
+    if(distance((float)((Border->position.x + 1.0f) * Border->scale.x), position.y) <= scale.y) {
+      cout << "position= " << position.y << endl;
+    }
   }
 
   generateModelMatrix();

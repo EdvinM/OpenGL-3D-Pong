@@ -1,7 +1,5 @@
 #include <glm/gtc/random.hpp>
 #include "asteroid.h"
-#include "projectile.h"
-#include "explosion.h"
 #include "player.h"
 
 #include <shaders/diffuse_vert_glsl.h>
@@ -88,9 +86,8 @@ bool Asteroid::update(Scene &scene, float dt) {
 
     // We only need to collide with asteroids and projectiles, ignore other objects
     auto asteroid = dynamic_cast<Asteroid*>(obj.get());
-    auto projectile = dynamic_cast<Projectile*>(obj.get());
     auto player = dynamic_cast<Player*>(obj.get());
-    if (!asteroid && !projectile && !player) continue;
+    if (!asteroid && !player) continue;
 
     if (distance(position, player->position) <= player->scale.x) {
       x_deviation_value = (player->scale.x - (distance(position, player->position))) + 0.01;

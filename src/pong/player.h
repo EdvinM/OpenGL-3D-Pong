@@ -1,6 +1,9 @@
 #pragma once
+#include <memory>
+
 #include <ppgso/ppgso.h>
 
+#include "scene.h"
 #include "object.h"
 
 /*!
@@ -50,8 +53,5 @@ public:
    * @param scene
    */
   void onClick(Scene &scene) override ;
-
-  bool CanCollide;
-  int id;
 };
 
