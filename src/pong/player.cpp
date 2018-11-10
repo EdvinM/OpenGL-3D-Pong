@@ -3,7 +3,6 @@
 #include "scene.h"
 #include "asteroid.h"
 #include "border.h"
-#include "life.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -37,24 +36,31 @@ Player::Player(Scene &scene, int control_up, int control_down, int position) : P
     auto life = make_unique<Life>();
     life->position.x = ((Scene::WIDTH) / 100.0f + 2.0f) * position;
     life->scale *= 0.05f;
-    scene.objects.push_back(move(life));
+    //scene.objects.push_back(move(life));
+    lifes.push_back(move(life));
 
     auto life2 = make_unique<Life>();
     life2->position.x = ((Scene::WIDTH) / 100.0f + 2.0f) * position;
     life2->position.y = 2.5f;
     life2->scale *= 0.05f;
-    scene.objects.push_back(move(life2));
+    //scene.objects.push_back(move(life2));
+    lifes.push_back(move(life2));
 
     auto life3 = make_unique<Life>();
     life3->position.x = ((Scene::WIDTH) / 100.0f + 2.0f) * position;
     life3->position.y = -2.5f;
     life3->scale *= 0.05f;
-    scene.objects.push_back(move(life3));
+    //scene.objects.push_back(move(life3));
+    lifes.push_back(move(life3));
 }
 
 bool Player::update(Scene &scene, float dt) {
   // Fire delay increment
   fireDelay += dt;
+
+  //Updated rendered player lifes
+    for (auto& obj : this->lifes)
+        obj->update(scene, dt);
 
   // Keyboard controls
   if(scene.keyboard[this->control_up] && (position.y * 100) <= 1280 - (texture->image.height / 3) && this->can_move_up) {
@@ -99,6 +105,11 @@ bool Player::update(Scene &scene, float dt) {
 }
 
 void Player::render(Scene &scene) {
+
+    //Render player lifes
+    for (auto& obj : this->lifes)
+        obj->render(scene);
+
   shader->use();
 
   // Set up light

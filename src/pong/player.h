@@ -5,6 +5,7 @@
 
 #include "scene.h"
 #include "object.h"
+#include "life.h"
 
 /*!
  * Simple object representing the player
@@ -28,6 +29,9 @@ private:
 
   bool can_move_up;
   bool can_move_down;
+
+    // All objects to be rendered in scene
+    std::list<std::unique_ptr<Life>> lifes;
 
 public:
   /*!

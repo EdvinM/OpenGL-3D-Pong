@@ -97,6 +97,14 @@ bool Asteroid::update(Scene &scene, float dt) {
       speed.x *= (-1);
       position.x += x_deviation_value;
     }
+
+    if(player->position.x <= -(Scene::WIDTH / 100.0)) {
+      //player->
+    }
+
+    if(player->position.x >= (Scene::WIDTH / 100.0)) {
+
+    }
   }
 
   // Generate modelMatrix from position, rotation and scale

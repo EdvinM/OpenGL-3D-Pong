@@ -37,6 +37,10 @@ class Life final : public Object {
        * @param scene Scene to render in
        */
         void render(Scene &scene) override;
+
+
+        bool active;
+
 };
 
 
