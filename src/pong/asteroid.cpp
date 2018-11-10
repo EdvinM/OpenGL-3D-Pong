@@ -69,16 +69,6 @@ bool Asteroid::update(Scene &scene, float dt) {
     position.y += x_deviation_value;
   }
 
-  //Check if ball has gone past left player
-  if (position.x <= -(Scene::WIDTH / 100.0)) {
-
-  }
-
-  //Check if ball has gone past right player
-  if(position.x >= (Scene::WIDTH / 100.0)) {
-
-  }
-
   // Collide with scene
   for (auto &obj : scene.objects) {
     // Ignore self in scene
@@ -89,6 +79,17 @@ bool Asteroid::update(Scene &scene, float dt) {
     auto player = dynamic_cast<Player*>(obj.get());
     if (!asteroid && !player) continue;
 
+    if((position.x >= (Scene::WIDTH / 100.0) && player->pos == 1) || (position.x <= -(Scene::WIDTH / 100.0) && player->pos == -1)) {
+      if(player->lifes.size() > 0) {
+
+        //Remove player life
+        player->lifes.pop_back();
+
+        //Destroy the ball
+        return false;
+      }
+    }
+
     if (distance(position, player->position) <= player->scale.y) {
       x_deviation_value = (player->scale.y - (distance(position, player->position))) + 0.01;
       if(speed.x > 0)
@@ -96,14 +97,6 @@ bool Asteroid::update(Scene &scene, float dt) {
 
       speed.x *= (-1);
       position.x += x_deviation_value;
-    }
-
-    if(player->position.x <= -(Scene::WIDTH / 100.0)) {
-      //player->
-    }
-
-    if(player->position.x >= (Scene::WIDTH / 100.0)) {
-
     }
   }
 

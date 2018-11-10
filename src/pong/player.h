@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 #include <ppgso/ppgso.h>
 
@@ -30,15 +31,18 @@ private:
   bool can_move_up;
   bool can_move_down;
 
-    // All objects to be rendered in scene
-    std::list<std::unique_ptr<Life>> lifes;
 
 public:
-  /*!
+    int pos;
+
+public:
+    // All objects to be rendered in scene
+    std::vector<std::unique_ptr<Life>> lifes;
+    /*!
    * Create a new player
    */
   Player();
-  Player(Scene &scene, int control_up, int control_down, int position);
+    Player(Scene &scene, int control_up, int control_down, int position);
 
   /*!
    * Update player position considering keyboard inputs
