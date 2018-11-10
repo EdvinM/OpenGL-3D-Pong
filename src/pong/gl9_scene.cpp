@@ -42,6 +42,13 @@ private:
     // Create a camera
     auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
     camera->position.z = -30.0f;
+    camera->position.y = -22.0f;
+    camera->position.x = 0.0f;
+
+    camera->back.y = -1.0f;
+    camera->back.z = -1.5f;
+
+    camera->up.y = 1.0f;
     scene.camera = move(camera);
 
     //Add background
