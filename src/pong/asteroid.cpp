@@ -17,6 +17,7 @@ unique_ptr<Shader> Asteroid::shader;
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
   speed = {linearRand(8.0f, 10.0f), linearRand(8.0f, 10.0f), 0.0f};
+  scale *= 0.15f;
 
   //Needed to give some randomness for our ball for the moving position
   if(rand() % 2 == 0) {
@@ -32,8 +33,8 @@ Asteroid::Asteroid() {
 
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-  if (!texture) texture = make_unique<Texture>(image::loadBMP("sphere.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("sphere.obj");
+  if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball_specular.bmp"));
+  if (!mesh) mesh = make_unique<Mesh>("soccerball.obj");
 }
 
 bool Asteroid::update(Scene &scene, float dt) {
