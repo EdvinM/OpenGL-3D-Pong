@@ -119,6 +119,10 @@ public:
 
     // Reset
     if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+      scene.objects.push_back(make_unique<Asteroid>());
+    }
+
+    if(key == GLFW_KEY_I && action == GLFW_PRESS) {
       initScene();
     }
 
