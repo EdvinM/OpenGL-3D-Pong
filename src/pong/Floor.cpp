@@ -22,6 +22,47 @@ Floor::Floor() {
 }
 
 bool Floor::update(Scene &scene, float dt) {
+
+    if (scene.keyboard[GLFW_KEY_0] && scene.keyboard[GLFW_KEY_K]){
+        scene.camera->position.x -= 0.01f;
+    }
+    else if (scene.keyboard[GLFW_KEY_1]&& scene.keyboard[GLFW_KEY_K]){
+        scene.camera->position.y -= 0.04f;
+    }
+    else if (scene.keyboard[GLFW_KEY_2]&& scene.keyboard[GLFW_KEY_K]){
+        scene.camera->position.z -= 0.04f;
+    }
+    else if (scene.keyboard[GLFW_KEY_3]&& scene.keyboard[GLFW_KEY_K]){
+        scene.camera->back.y -= 0.01f;
+    }
+    else if (scene.keyboard[GLFW_KEY_4]&& scene.keyboard[GLFW_KEY_K]){
+        scene.camera->back.z -= 0.01f;
+    }
+
+    else if (scene.keyboard[GLFW_KEY_0]){
+        scene.camera->position.x += 0.01f;
+    }
+    else if (scene.keyboard[GLFW_KEY_1]){
+        scene.camera->position.y += 0.04f;
+    }
+    else if (scene.keyboard[GLFW_KEY_2]){
+        scene.camera->position.z += 0.04f;
+    }
+    else if (scene.keyboard[GLFW_KEY_3]){
+        scene.camera->back.y += 0.01f;
+    }
+    else if (scene.keyboard[GLFW_KEY_4]){
+        scene.camera->back.z += 0.01f;
+    }
+    else if (scene.keyboard[GLFW_KEY_J]){
+        scene.camera->up = {0,1,0};
+        scene.camera->position = {0,0,0};
+        scene.camera->back = {0,0,-1};
+        scene.camera->position.z = -20.0f;
+        scene.camera->position.y = -15.0f;
+        scene.camera->back.y = -0.8f;
+    }
+
     generateModelMatrix();
     return true;
 }
