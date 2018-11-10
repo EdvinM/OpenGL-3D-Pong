@@ -34,7 +34,7 @@ public:
    * Create a new player
    */
   Player();
-  Player(int control_up, int control_down, int id);
+  Player(Scene &scene, int control_up, int control_down, int position);
 
   /*!
    * Update player position considering keyboard inputs

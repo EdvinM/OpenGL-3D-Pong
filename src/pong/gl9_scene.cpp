@@ -56,11 +56,11 @@ private:
     scene.objects.push_back(make_unique<Space>());
 
     // Add player to the scene
-    auto player1 = make_unique<Player>(GLFW_KEY_W, GLFW_KEY_S, 1);
+    auto player1 = make_unique<Player>(scene, GLFW_KEY_W, GLFW_KEY_S, 1);
     player1->position.x = 12;
     scene.objects.push_back(move(player1));
 
-    auto player2 = make_unique<Player>(GLFW_KEY_UP, GLFW_KEY_DOWN, 2);
+    auto player2 = make_unique<Player>(scene, GLFW_KEY_UP, GLFW_KEY_DOWN, -1);
     player2->position.x = -12;
     scene.objects.push_back(move(player2));
 
@@ -84,12 +84,6 @@ private:
     floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
     floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
     scene.objects.push_back(move(floor));
-
-    auto life = make_unique<Life>();
-    life->position.x = 0;
-    life->scale *= 0.05f;
-    //life->rotation.x = -90.0f;
-    scene.objects.push_back(move(life));
   }
 
 public:
