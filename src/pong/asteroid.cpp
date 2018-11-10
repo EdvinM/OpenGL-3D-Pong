@@ -27,9 +27,6 @@ Asteroid::Asteroid() {
     speed.y *= -1;
   }
 
-  cout << "Asteroid x= " << speed.x << endl;
-  cout << "Asteroid y= " << speed.y << endl;
-
   rotation = ballRand(PI);
   rotMomentum = ballRand(PI);
 
@@ -102,8 +99,8 @@ bool Asteroid::update(Scene &scene, float dt) {
     auto player = dynamic_cast<Player*>(obj.get());
     if (!asteroid && !player) continue;
 
-    if (distance(position, player->position) <= player->scale.x) {
-      x_deviation_value = (player->scale.x - (distance(position, player->position))) + 0.01;
+    if (distance(position, player->position) <= player->scale.y) {
+      x_deviation_value = (player->scale.y - (distance(position, player->position))) + 0.01;
       if(speed.x > 0)
         x_deviation_value *= -1;
 

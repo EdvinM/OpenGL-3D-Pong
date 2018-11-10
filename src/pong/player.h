@@ -26,6 +26,9 @@ private:
   int control_up;
   int control_down;
 
+  bool can_move_up;
+  bool can_move_down;
+
 public:
   /*!
    * Create a new player

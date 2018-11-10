@@ -59,12 +59,12 @@ private:
     //Add ball to the game
     scene.objects.push_back(make_unique<Asteroid>());
 
-    auto border_top = make_unique<border>();
+    auto border_top = make_unique<border>(1);
     border_top->position.y = static_cast<float>(Scene::WIDTH / 100.0);
     border_top->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
     scene.objects.push_back(move(border_top));
 
-    auto border_bottom = make_unique<border>();
+    auto border_bottom = make_unique<border>(2);
     border_bottom->position.y = -static_cast<float>(Scene::WIDTH / 100.0);
     border_bottom->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
     scene.objects.push_back(move(border_bottom));

@@ -29,6 +29,9 @@ Player::Player() {
 Player::Player(int control_up, int control_down, int id) : Player() {
   this->control_up    = control_up;
   this->control_down  = control_down;
+
+  this->can_move_up   = true;
+  this->can_move_down = true;
 }
 
 bool Player::update(Scene &scene, float dt) {
@@ -36,9 +39,9 @@ bool Player::update(Scene &scene, float dt) {
   fireDelay += dt;
 
   // Keyboard controls
-  if(scene.keyboard[this->control_up] && (position.y * 100) <= 1280 - (texture->image.height / 3)) {
+  if(scene.keyboard[this->control_up] && (position.y * 100) <= 1280 - (texture->image.height / 3) && this->can_move_up) {
     position.y += 10 * dt;
-  } else if(scene.keyboard[this->control_down] && (position.y * 100) > -1280 + (texture->image.height / 3)) {
+  } else if(scene.keyboard[this->control_down] && (position.y * 100) > -1280 + (texture->image.height / 3) && this->can_move_down) {
     position.y -= 10 * dt;
   }
 
@@ -50,9 +53,26 @@ bool Player::update(Scene &scene, float dt) {
 
     if(!Border) continue;
 
-    //cout << << endl;
-    if(distance((float)((Border->position.x + 1.0f) * Border->scale.x), position.y) <= scale.y) {
-      cout << "position= " << position.y << endl;
+    if (distance(Border->position, position) < Border->scale.x) {
+        //Stop upper movement for our paddle if it reached border down
+
+        if (Border->border_position == 2) {
+            this->can_move_down = false;
+        }
+
+        //Stop upper movement for our paddle if it reached upper border
+        if (Border->border_position == 1) {
+            this->can_move_up = false;
+        }
+    } else {
+
+        if(abs(Border->scale.x - distance(Border->position, position)) >= 0.6f) {
+            if (!this->can_move_up && Border->border_position == 1)
+                this->can_move_up = true;
+
+            if (!this->can_move_down && Border->border_position == 2)
+                this->can_move_down = true;
+        }
     }
   }
 

@@ -22,6 +22,10 @@ border::border() {
     if (!mesh) mesh = make_unique<Mesh>("border.obj");
 }
 
+border::border(int border_position) : border() {
+    this->border_position = border_position;
+}
+
 bool border::update(Scene &scene, float dt) {
 
     generateModelMatrix();

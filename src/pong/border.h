@@ -24,7 +24,11 @@ class border final : public Object {
         static std::unique_ptr<ppgso::Texture> texture;
 
     public:
+
+        int border_position;
+
         border();
+        border(int border_position);
 
         /*!
         * Update player position considering keyboard inputs
