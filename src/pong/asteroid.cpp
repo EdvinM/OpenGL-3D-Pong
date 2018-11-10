@@ -49,8 +49,8 @@ bool Asteroid::update(Scene &scene, float dt) {
   float x_deviation_value = 0;
 
   //Check for collision with screen boundaries
-  if (position.y <= -(Scene::WIDTH / 100.0)) {
-    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) + position.y + 0.01);
+  if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
+    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
 
     if(speed.y < 0)
       x_deviation_value *= -1;
@@ -59,8 +59,8 @@ bool Asteroid::update(Scene &scene, float dt) {
     position.y += x_deviation_value;
   }
 
-  if(position.y >= (Scene::WIDTH / 100.0)) {
-    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - position.y + 0.01);
+  if(position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
+    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
 
     if(speed.y < 0)
       x_deviation_value *= -1;
@@ -69,24 +69,14 @@ bool Asteroid::update(Scene &scene, float dt) {
     position.y += x_deviation_value;
   }
 
+  //Check if ball has gone past left player
   if (position.x <= -(Scene::WIDTH / 100.0)) {
-    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) + position.x + 0.01);
 
-    if(speed.x < 0)
-      x_deviation_value *= -1;
-
-    speed.x *= (-1);
-    position.x += x_deviation_value;
   }
 
+  //Check if ball has gone past right player
   if(position.x >= (Scene::WIDTH / 100.0)) {
-    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - position.x + 0.01);
 
-    if(speed.x < 0)
-      x_deviation_value *= -1;
-
-    speed.x *= (-1);
-    position.x += x_deviation_value;
   }
 
   // Collide with scene
