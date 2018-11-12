@@ -18,6 +18,8 @@ class Scene {
     const static unsigned int WIDTH = 1280;
     const static unsigned int HEIGHT = 720;
 
+    glm::vec3 RotateColor(glm::vec3& inColor , float H);
+
     Scene();
 
     /*!
@@ -58,6 +60,8 @@ class Scene {
       double x, y;
       bool left, right;
     } cursor;
+
+    float t = 0;
 };
 
 #endif // _PPGSO_SCENE_H
