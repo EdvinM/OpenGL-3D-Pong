@@ -69,16 +69,14 @@ bool Floor::update(Scene &scene, float dt) {
 
 void Floor::render(Scene &scene) {
     shader->use();
-
-    // Set up light
     shader->setUniform("LightDirection", scene.lightDirection);
-
-    // use camera
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-
-    // render mesh
+    shader->setUniform("LightColor", scene.lightColor);
+    shader->setUniform("AmbientLightColor", scene.ambientLightColor);
+    shader->setUniform("CameraPosition", scene.camera->position);
     shader->setUniform("ModelMatrix", modelMatrix);
+    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
+
     shader->setUniform("Texture", *texture);
     mesh->render();
 }

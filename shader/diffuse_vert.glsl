@@ -12,12 +12,16 @@ uniform mat4 ModelMatrix;
 // This will be passed to the fragment shader
 out vec2 texCoord;
 
+out vec3 worldPosition;
+
 // Normal to pass to the fragment shader
 out vec4 normal;
 
 void main() {
   // Copy the input to the fragment shader
   texCoord = TexCoord;
+
+  worldPosition = vec3(ModelMatrix * vec4(Position, 1.0)).xyz;
 
   // Normal in world coordinates
   normal = normalize(ModelMatrix * vec4(Normal, 0.0f));

@@ -110,19 +110,17 @@ void Player::render(Scene &scene) {
     for (auto& obj : this->lifes)
         obj->render(scene);
 
-  shader->use();
+    shader->use();
+    shader->setUniform("LightDirection", scene.lightDirection);
+    shader->setUniform("LightColor", scene.lightColor);
+    shader->setUniform("AmbientLightColor", scene.ambientLightColor);
+    shader->setUniform("CameraPosition", scene.camera->position);
+    shader->setUniform("ModelMatrix", modelMatrix);
+    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
 
-  // Set up light
-  shader->setUniform("LightDirection", scene.lightDirection);
-
-  // use camera
-  shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-  shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-
-  // render mesh
-  shader->setUniform("ModelMatrix", modelMatrix);
-  shader->setUniform("Texture", *texture);
-  mesh->render();
+    shader->setUniform("Texture", *texture);
+    mesh->render();
 }
 
 void Player::onClick(Scene &scene) {
