@@ -36,7 +36,7 @@ Asteroid::Asteroid() {
 
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-  if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball_specular.bmp"));
+  if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball.bmp"));
   if (!mesh) mesh = make_unique<Mesh>("game_ball.obj");
 
   //Load mtl files
