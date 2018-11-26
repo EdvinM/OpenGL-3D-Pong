@@ -20,10 +20,7 @@ map<std::string, int> Player::material_map;
 vector<tinyobj::material_t> Player::material;
 
 Player::Player() {
-  // Scale the default model
-  scale.x *= 1.5f;
-  scale.y *= 1.5f;
-  scale.z *= 3.0f;
+  mutex = false;
 
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
@@ -52,6 +49,8 @@ Player::Player(Scene &scene, int control_up, int control_down, int position) : P
 
     auto life3 = make_unique<Life>(vec3({0, 0, 0}), vec3({1* 0.05f,1* 0.05f,1* 0.05f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, -2.5f, 0}));
     lifes.push_back(move(life3));
+
+    this->mutex = false;
 }
 
 bool Player::update(Scene &scene, float dt) {
@@ -91,7 +90,7 @@ bool Player::update(Scene &scene, float dt) {
         }
     } else {
 
-        if(abs(Border->scale.x - distance(Border->position, position)) >= 0.1f) {
+        if (abs(Border->scale.x - distance(Border->position, position)) >= 0.1f) {
             if (!this->can_move_up && Border->border_position == 1)
                 this->can_move_up = true;
 

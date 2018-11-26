@@ -19,8 +19,7 @@ vector<tinyobj::material_t> Asteroid::material;
 
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
-  speed = {linearRand(8.0f, 10.0f), linearRand(8.0f, 10.0f), 0.0f};
-  scale *= 0.02f;
+  speed = {6.0f, linearRand(10.0f, 13.0f), 0.0f};
 
   //Needed to give some randomness for our ball for the moving position
   if(rand() % 2 == 0) {
@@ -31,13 +30,13 @@ Asteroid::Asteroid() {
     speed.y *= -1;
   }
 
-  rotation = ballRand(PI);
-  rotMomentum = ballRand(PI);
+  rotation = {0.0f, 2.0f, 0.0f};
+  rotMomentum = {0.0f, linearRand(1.0f, 3.0f), 0.0f};
 
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("game_ball.obj");
+  if (!mesh) mesh = make_unique<Mesh>("puck.obj");
 
   //Load mtl files
   ifstream mtl("game_ball.mtl", std::ifstream::binary);
@@ -98,13 +97,22 @@ bool Asteroid::update(Scene &scene, float dt) {
       }
     }
 
-    if (distance(position, player->position) <= (player->scale.y * 2)) {
-      x_deviation_value = ((player->scale.y * 2) - (distance(position, player->position))) + 0.01;
-      if(speed.x > 0)
-        x_deviation_value *= -1;
+    if (distance(position, player->position) <= player->scale.y) {
 
-      speed.x *= (-1);
-      position.x += x_deviation_value;
+      if(!player->mutex) {
+        float dx = (player->position.x * player->scale.x) - (position.x * scale.x);
+        float dy = (player->position.y * player->scale.y) - (position.y * scale.y);
+
+        float angle = atan2(dy, dx);
+
+        speed.x *= -1;
+        speed.y = (15.0f * -sin(angle));
+
+        player->mutex = true;
+      }
+    }
+    else {
+      player->mutex = false;
     }
   }
 

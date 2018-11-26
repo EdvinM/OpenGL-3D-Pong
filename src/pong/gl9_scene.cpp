@@ -59,15 +59,20 @@ private:
     auto player1 = make_unique<Player>(scene, GLFW_KEY_W, GLFW_KEY_S, 1);
     player1->position.x = 12.0f;
     player1->position.z = 1.0f;
+    player1->scale = {1.5f, 1.5f, 3.0f};
     scene.objects.push_back(move(player1));
 
     auto player2 = make_unique<Player>(scene, GLFW_KEY_UP, GLFW_KEY_DOWN, -1);
     player2->position.x = -12;
     player2->position.z = 1.0f;
+    player2->scale = {1.5f, 1.5f, 3.0f};
     scene.objects.push_back(move(player2));
 
     //Add ball to the game
-    scene.objects.push_back(make_unique<Asteroid>());
+    auto ball = make_unique<Asteroid>();
+    ball->position.z = 1.0f;
+    ball->scale = {1.5f, 1.5f, 1.2f};
+    scene.objects.push_back(move(ball));
 
     auto border_top = make_unique<border>(1);
     border_top->position.y = static_cast<float>(Scene::WIDTH / 100.0);
