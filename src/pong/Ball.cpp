@@ -1,5 +1,5 @@
 #include <glm/gtc/random.hpp>
-#include "asteroid.h"
+#include "Ball.h"
 #include "player.h"
 
 #include <shaders/diffuse_vert_glsl.h>
@@ -10,14 +10,14 @@ using namespace glm;
 using namespace ppgso;
 
 // Static resources
-unique_ptr<Mesh> Asteroid::mesh;
-unique_ptr<Texture> Asteroid::texture;
-unique_ptr<Shader> Asteroid::shader;
+unique_ptr<Mesh> Ball::mesh;
+unique_ptr<Texture> Ball::texture;
+unique_ptr<Shader> Ball::shader;
 
-map<std::string, int> Asteroid::material_map;
-vector<tinyobj::material_t> Asteroid::material;
+map<std::string, int> Ball::material_map;
+vector<tinyobj::material_t> Ball::material;
 
-Asteroid::Asteroid() {
+Ball::Ball() {
   // Set random scale speed and rotation
   speed = {6.0f, linearRand(10.0f, 13.0f), 0.0f};
 
@@ -43,7 +43,7 @@ Asteroid::Asteroid() {
   tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
-bool Asteroid::update(Scene &scene, float dt) {
+bool Ball::update(Scene &scene, float dt) {
   // Count time alive
   age += dt;
 
@@ -82,9 +82,9 @@ bool Asteroid::update(Scene &scene, float dt) {
     if (obj.get() == this) continue;
 
     // We only need to collide with asteroids and projectiles, ignore other objects
-    auto asteroid = dynamic_cast<Asteroid*>(obj.get());
+    auto ball = dynamic_cast<Ball*>(obj.get());
     auto player = dynamic_cast<Player*>(obj.get());
-    if (!asteroid && !player) continue;
+    if (!ball && !player) continue;
 
     if((position.x >= (Scene::WIDTH / 100.0) && player->pos == 1) || (position.x <= -(Scene::WIDTH / 100.0) && player->pos == -1)) {
       if(player->lifes.size() > 0) {
@@ -122,7 +122,7 @@ bool Asteroid::update(Scene &scene, float dt) {
   return true;
 }
 
-void Asteroid::render(Scene &scene) {
+void Ball::render(Scene &scene) {
 
   vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
   vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
@@ -147,7 +147,7 @@ void Asteroid::render(Scene &scene) {
   mesh->render();
 }
 
-void Asteroid::onClick(Scene &scene) {
+void Ball::onClick(Scene &scene) {
   cout << "Asteroid clicked!" << endl;
   age = 10000;
 }

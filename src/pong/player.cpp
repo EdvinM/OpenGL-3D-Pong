@@ -1,7 +1,7 @@
 #include <glm/gtc/random.hpp>
 #include "player.h"
 #include "scene.h"
-#include "asteroid.h"
+#include "Ball.h"
 #include "border.h"
 
 #include <shaders/diffuse_vert_glsl.h>

@@ -182,7 +182,7 @@ add_executable(pong
         src/pong/object.cpp
         src/pong/scene.cpp
         src/pong/camera.cpp
-        src/pong/asteroid.cpp
+        src/pong/Ball.cpp
         src/pong/player.cpp
         src/pong/space.cpp src/pong/border.cpp src/pong/border.h src/pong/Floor.cpp src/pong/Floor.h src/pong/life.cpp src/pong/life.h)
 target_link_libraries(pong ppgso shaders)

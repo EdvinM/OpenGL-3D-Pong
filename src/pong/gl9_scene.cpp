@@ -16,7 +16,7 @@
 #include "scene.h"
 #include "player.h"
 #include "space.h"
-#include "asteroid.h"
+#include "Ball.h"
 #include "border.h"
 #include "Floor.h"
 #include "life.h"
@@ -69,7 +69,7 @@ private:
     scene.objects.push_back(move(player2));
 
     //Add ball to the game
-    auto ball = make_unique<Asteroid>();
+    auto ball = make_unique<Ball>();
     ball->position.z = 1.0f;
     ball->scale = {1.5f, 1.5f, 1.2f};
     scene.objects.push_back(move(ball));
@@ -124,7 +124,11 @@ public:
 
     // Reset
     if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-      scene.objects.push_back(make_unique<Asteroid>());
+        auto ball = make_unique<Ball>();
+        ball->position.z = 1.0f;
+        ball->scale = {1.5f, 1.5f, 1.2f};
+
+        scene.objects.push_back(move(ball));
     }
 
     if(key == GLFW_KEY_I && action == GLFW_PRESS) {

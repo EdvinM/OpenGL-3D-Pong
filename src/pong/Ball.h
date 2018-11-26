@@ -12,7 +12,7 @@
  * It initializes and loads all resources only once
  * It will move down along the Y axis and self delete when reaching below -10
  */
-class Asteroid final : public Object {
+class Ball final : public Object {
 private:
   // Static resources (Shared between instances)
   static std::unique_ptr<ppgso::Mesh> mesh;
@@ -33,7 +33,7 @@ public:
   /*!
    * Create new asteroid
    */
-  Asteroid();
+  Ball();
 
   /*!
    * Update asteroid
