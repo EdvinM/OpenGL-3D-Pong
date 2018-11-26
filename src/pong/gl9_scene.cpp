@@ -63,7 +63,7 @@ private:
     scene.objects.push_back(move(player1));
 
     auto player2 = make_unique<Player>(scene, GLFW_KEY_UP, GLFW_KEY_DOWN, -1);
-    player2->position.x = -12;
+    player2->position.x = -12.0f;
     player2->position.z = 1.0f;
     player2->scale = {1.5f, 1.5f, 3.0f};
     scene.objects.push_back(move(player2));
@@ -71,7 +71,7 @@ private:
     //Add ball to the game
     auto ball = make_unique<Ball>();
     ball->position.z = 1.0f;
-    ball->scale = {1.5f, 1.5f, 1.2f};
+    ball->scale = {1.5f, 1.5f, 1.0f};
     scene.objects.push_back(move(ball));
 
     auto border_top = make_unique<border>(1);
