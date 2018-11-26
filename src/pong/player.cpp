@@ -21,15 +21,17 @@ vector<tinyobj::material_t> Player::material;
 
 Player::Player() {
   // Scale the default model
-  scale.y *= 3.0f;
+  scale.x *= 1.5f;
+  scale.y *= 1.5f;
+  scale.z *= 3.0f;
 
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!texture) texture = make_unique<Texture>(image::loadBMP("corsair.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("paddle.obj");
+  if (!mesh) mesh = make_unique<Mesh>("hockeypaddle.obj");
 
     //Load mtl files
-    ifstream mtl("paddle.mtl", std::ifstream::binary);
+    ifstream mtl("hockeypaddle.mtl", std::ifstream::binary);
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
@@ -62,9 +64,9 @@ bool Player::update(Scene &scene, float dt) {
     }
 
   // Keyboard controls
-  if(scene.keyboard[this->control_up] && (position.y * 100) <= 1280 - (texture->image.height / 3) && this->can_move_up) {
+  if(scene.keyboard[this->control_up] && this->can_move_up) {
     position.y += 10 * dt;
-  } else if(scene.keyboard[this->control_down] && (position.y * 100) > -1280 + (texture->image.height / 3) && this->can_move_down) {
+  } else if(scene.keyboard[this->control_down] && this->can_move_down) {
     position.y -= 10 * dt;
   }
 
@@ -76,7 +78,7 @@ bool Player::update(Scene &scene, float dt) {
 
     if(!Border) continue;
 
-    if (distance(Border->position, position) < Border->scale.x) {
+    if (distance(Border->position, position) <= 12.2) {
         //Stop upper movement for our paddle if it reached border down
 
         if (Border->border_position == 2) {
@@ -89,7 +91,7 @@ bool Player::update(Scene &scene, float dt) {
         }
     } else {
 
-        if(abs(Border->scale.x - distance(Border->position, position)) >= 0.6f) {
+        if(abs(Border->scale.x - distance(Border->position, position)) >= 0.1f) {
             if (!this->can_move_up && Border->border_position == 1)
                 this->can_move_up = true;
 

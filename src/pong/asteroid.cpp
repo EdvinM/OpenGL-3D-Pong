@@ -20,7 +20,7 @@ vector<tinyobj::material_t> Asteroid::material;
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
   speed = {linearRand(8.0f, 10.0f), linearRand(8.0f, 10.0f), 0.0f};
-  scale *= 0.15f;
+  scale *= 0.02f;
 
   //Needed to give some randomness for our ball for the moving position
   if(rand() % 2 == 0) {
@@ -37,10 +37,10 @@ Asteroid::Asteroid() {
   // Initialize static resources if needed
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball_specular.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("soccerball.obj");
+  if (!mesh) mesh = make_unique<Mesh>("game_ball.obj");
 
   //Load mtl files
-  ifstream mtl("uvmappedcube.mtl", std::ifstream::binary);
+  ifstream mtl("game_ball.mtl", std::ifstream::binary);
   tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
@@ -98,8 +98,8 @@ bool Asteroid::update(Scene &scene, float dt) {
       }
     }
 
-    if (distance(position, player->position) <= player->scale.y) {
-      x_deviation_value = (player->scale.y - (distance(position, player->position))) + 0.01;
+    if (distance(position, player->position) <= (player->scale.y * 2)) {
+      x_deviation_value = ((player->scale.y * 2) - (distance(position, player->position))) + 0.01;
       if(speed.x > 0)
         x_deviation_value *= -1;
 

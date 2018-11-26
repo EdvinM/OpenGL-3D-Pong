@@ -27,7 +27,6 @@ Floor::Floor() {
     ifstream mtl("uvmappedcube.mtl", std::ifstream::binary);
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
 
-
     //Starting camera position
     this->cameraPositions[0].position = {0, -22.0, -30.0f};
     this->cameraPositions[0].up = {0,1,0};

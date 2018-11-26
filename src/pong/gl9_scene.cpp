@@ -57,11 +57,13 @@ private:
 
     // Add player to the scene
     auto player1 = make_unique<Player>(scene, GLFW_KEY_W, GLFW_KEY_S, 1);
-    player1->position.x = 12;
+    player1->position.x = 12.0f;
+    player1->position.z = 1.0f;
     scene.objects.push_back(move(player1));
 
     auto player2 = make_unique<Player>(scene, GLFW_KEY_UP, GLFW_KEY_DOWN, -1);
     player2->position.x = -12;
+    player2->position.z = 1.0f;
     scene.objects.push_back(move(player2));
 
     //Add ball to the game
