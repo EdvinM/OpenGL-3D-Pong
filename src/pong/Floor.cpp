@@ -92,6 +92,27 @@ bool Floor::update(Scene &scene, float dt) {
         scene.camera->position = this->cameraPositions[1].position;
     }
 
+
+    //Light Movement
+    else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_LEFT]) {
+        scene.lightDirection.x -= 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_RIGHT]) {
+        scene.lightDirection.x += 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_UP]) {
+        scene.lightDirection.y += 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_DOWN]) {
+        scene.lightDirection.y -= 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_Z]) {
+        scene.lightDirection.z -= 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_X]) {
+        scene.lightDirection.z += 0.05;
+    }
+
     generateModelMatrix();
     return true;
 }
