@@ -31,7 +31,7 @@ bool Life::update(Scene &scene, float dt) {
         return false;
 
     // Rotate the object
-    rotation = vec3({0, time, 0});
+    //rotation = vec3({0, time, 0});
     time += 0.01f;
 
     generateModelMatrix();

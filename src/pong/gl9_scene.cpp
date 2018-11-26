@@ -79,8 +79,6 @@ private:
 
     auto floor = make_unique<Floor>();
     floor->position.z = 2.0f;
-    floor->position.x = 0;
-    floor->position.y = static_cast<float>(Scene::WIDTH / 100.0);
     floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
     floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
     scene.objects.push_back(move(floor));

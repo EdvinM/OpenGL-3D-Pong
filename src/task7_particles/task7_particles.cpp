@@ -32,6 +32,10 @@ public:
   mat4 viewMatrix;
   mat4 projectionMatrix;
 
+  vec3 position = {0, 0, -25};
+  vec3 view     = {0, 0, 1};
+  vec3 up       = {0, 1, 0};
+
   /// Representaiton of
   /// \param fov - Field of view (in degrees)
   /// \param ratio - Viewport ratio (width/height)
@@ -39,11 +43,15 @@ public:
   /// \param far - Distance of the far clipping plane
   Camera(float fov = 45.0f, float ratio = 1.0f, float near = 0.1f, float far = 10.0f) {
     // TODO: Initialize perspective projection (hint: glm::perspective)
+
+      projectionMatrix = perspective((PI / 180.0f) * fov, ratio, near, far);
   }
 
   /// Recalculate viewMatrix from position, rotation and scale
   void update() {
     // TODO: Update viewMatrix (hint: glm::lookAt)
+
+    viewMatrix = lookAt(position, position + view, up);
   }
 };
 
@@ -76,11 +84,27 @@ class Particle final : public Renderable {
 
   // TODO: add more parameters as needed
 public:
+    vec3 position;
+    vec3 direction;
+    vec3 color;
+    vec3 scale = {1, 1, 1};
+    vec3 rotation = {0, 0, 0};
+    vec3 wind_speed = {-linearRand(0.3f, 0.6f), 0, 0};
+    mat4 modelMatrix{1};
+
+    float age = 0;
+    float speed = 25.0f ;
   /// Construct a new Particle
   /// \param p - Initial position
   /// \param s - Initial speed
   /// \param c - Color of particle
   Particle(vec3 p, vec3 s, vec3 c) {
+
+      position = p;
+      direction = s;
+      color = c;
+      age = 0;
+
     // First particle will initialize resources
     if (!shader) shader = make_unique<Shader>(color_vert_glsl, color_frag_glsl);
     if (!mesh) mesh = make_unique<Mesh>("sphere.obj");
@@ -91,6 +115,27 @@ public:
     // - Return true to keep the object alive
     // - Returning false removes the object from the scene
     // - hint: you can add more particles to the scene here also
+
+      age += dTime;
+
+      position += direction * dTime * speed;
+
+      if(age >= 1.5f) {
+          position.x = position.x + (sin(age * 25) / 50.0f / (age * 2));
+      }
+
+      scale -= 0.00035f;
+
+      if(age <= 2.5f) {
+          color.g += dTime * 0.5f;
+      }
+      else {
+          position += (dTime * speed * wind_speed);
+      }
+
+      modelMatrix = glm::translate(mat4(1.0f), position) * glm::scale(mat4(1.0f), scale);
+
+      return age < 4.0f;
   }
 
   void render(const Camera& camera) override {
@@ -99,6 +144,17 @@ public:
     // - Setup all needed shader inputs
     // - hint: use OverallColor in the color_vert_glsl shader for color
     // - Render the mesh
+      shader->use();
+
+      //shader->setUniform("LightDirection", scene.lightDirection);
+
+      shader->setUniform("ProjectionMatrix", camera.projectionMatrix);
+      shader->setUniform("ViewMatrix", camera.viewMatrix);
+
+      shader->setUniform("ModelMatrix", modelMatrix);
+//        shader->setUniform("Texture", *texture);
+      shader->setUniform("OverallColor", color);
+      mesh->render();
   }
 };
 // Static resources need to be instantiated outside of the class as they are globals
@@ -128,6 +184,15 @@ public:
     keys[key] = action;
     if (keys[GLFW_KEY_SPACE]) {
       // TODO: Add renderable object to the scene
+
+        for(int i = 0; i < 20; i++) {
+            vec3 pos = {linearRand(0.0f, 20.0f), linearRand(-27.0f, -24.0f), linearRand(0.0f, 7.0f)};
+            vec3 direction = {0, 0.5f, 0};
+            vec3 color = {1, 0, 0};
+
+            unique_ptr<Particle> renderable = make_unique<Particle>(pos, direction, color);
+            scene.push_back(move(renderable));
+        }
     }
   }
 
@@ -158,6 +223,7 @@ public:
     }
 
     // Render every object in scene
+    camera.update();
     for(auto& object : scene) {
       object->render(camera);
     }

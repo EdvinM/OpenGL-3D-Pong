@@ -17,8 +17,8 @@ unique_ptr<Shader> Floor::shader;
 
 Floor::Floor() {
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-    if (!texture) texture = make_unique<Texture>(image::loadBMP("sphere.bmp"));
-    if (!mesh) mesh = make_unique<Mesh>("floor.obj");
+    if (!texture) texture = make_unique<Texture>(image::loadBMP("grass.bmp"));
+    if (!mesh) mesh = make_unique<Mesh>("uvmappedcube.obj");
 }
 
 bool Floor::update(Scene &scene, float dt) {
