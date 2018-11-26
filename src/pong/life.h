@@ -12,7 +12,16 @@
 #include "scene.h"
 #include "object.h"
 
+struct Keyframe {
+    glm::vec3 keyframePosition = {0, 0, 0};
+    glm::vec3 keyframeRotation = {0, 0, 0};
+    glm::vec3 keyframeScale = {1, 1, 1};
+    float duration = 100;
+};
+
 class Life final : public Object {
+
+
     private:
         // Static resources (Shared between instances)
         static std::unique_ptr<ppgso::Mesh> mesh;
@@ -25,16 +34,15 @@ class Life final : public Object {
 
         float time;
 
-        struct keyFrame {
-            glm::vec3 position;
-            glm::vec3 scale;
-            glm::vec3 rotation;
-
-            float time;
-        };
+            Keyframe keyframeAnimation[5];
+            int keyframeCount = 4;
+            float keyframeDuration = 0;
+            int processedKeyframes = 0;
 
     public:
         Life();
+
+        Life(glm::vec3 rotation, glm::vec3 scale, glm::vec3 position);
 
         /*!
         * Update player position considering keyboard inputs
@@ -50,6 +58,7 @@ class Life final : public Object {
        */
         void render(Scene &scene) override;
 
+        glm::vec3 linearInterpolation(glm::vec3 a, glm::vec3 b, float t);
 
         bool active;
 

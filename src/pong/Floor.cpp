@@ -92,19 +92,6 @@ bool Floor::update(Scene &scene, float dt) {
         scene.camera->position = this->cameraPositions[1].position;
     }
 
-    else if(scene.keyboard[GLFW_KEY_S]) {
-
-        cout << scene.camera->back.x << endl;
-        cout << scene.camera->back.y << endl;
-        cout << scene.camera->back.z << endl;
-
-        cout << scene.camera->position.x << endl;
-        cout << scene.camera->position.y << endl;
-        cout << scene.camera->position.z << endl;
-
-        cout << endl;
-    }
-
     generateModelMatrix();
     return true;
 }

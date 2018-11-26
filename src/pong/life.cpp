@@ -18,6 +18,16 @@ unique_ptr<Shader> Life::shader;
 map<std::string, int> Life::material_map;
 vector<tinyobj::material_t> Life::material;
 
+Keyframe setKeyframe(int duration, vec3 keyFrameRotation, vec3 keyFrameScale, vec3 keyFramePosition){
+    Keyframe newKeyframe;
+    newKeyframe.duration = duration;
+    newKeyframe.keyframeRotation = keyFrameRotation;
+    newKeyframe.keyframeScale = keyFrameScale;
+    newKeyframe.keyframePosition = keyFramePosition;
+
+    return newKeyframe;
+}
+
 Life::Life() {
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
     if (!texture) texture = make_unique<Texture>(image::loadBMP("heart_lp.bmp"));
@@ -32,12 +42,40 @@ Life::Life() {
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
+Life::Life(glm::vec3 rotation, glm::vec3 scale, glm::vec3 position) : Life() {
+    this->rotation = rotation;
+    this->scale = scale;
+    this->position = position;
+
+    keyframeAnimation[0] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
+    keyframeAnimation[1] = setKeyframe(100, {0, 5, 0}, this->scale, this->position);
+    keyframeAnimation[2] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
+    keyframeAnimation[3] = setKeyframe(100, {0, 0, 0}, this->scale, this->position);
+}
+
+vec3 Life::linearInterpolation(vec3 a, vec3 b, float t){
+    vec3 result = (1 - t) * a + t * b;
+    return result;
+}
+
 bool Life::update(Scene &scene, float dt) {
 
     if(!this->active)
         return false;
 
     time += 0.01f;
+
+    Keyframe current = keyframeAnimation[processedKeyframes];
+    Keyframe next = keyframeAnimation[(processedKeyframes + 1) % keyframeCount];
+    float t = keyframeDuration / current.duration;
+    position = linearInterpolation(current.keyframePosition, next.keyframePosition, t);
+    scale = linearInterpolation(current.keyframeScale, next.keyframeScale, t);
+    rotation = linearInterpolation(current.keyframeRotation, next.keyframeRotation, t);
+    keyframeDuration++;
+    if (keyframeDuration >= current.duration) {
+        keyframeDuration = 0;
+        processedKeyframes = (processedKeyframes + 1) % keyframeCount;
+    }
 
     generateModelMatrix();
     return true;
