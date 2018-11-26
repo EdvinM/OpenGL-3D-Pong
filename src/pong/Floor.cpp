@@ -3,6 +3,7 @@
 //
 
 #include "Floor.h"
+#include <iterator>
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 
@@ -25,6 +26,17 @@ Floor::Floor() {
 
     ifstream mtl("uvmappedcube.mtl", std::ifstream::binary);
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
+
+
+    //Starting camera position
+    this->cameraPositions[0].position = {0, -22.0, -30.0f};
+    this->cameraPositions[0].up = {0,1,0};
+    this->cameraPositions[0].back = {0,-1.0f,-1.5f};
+
+    //Up camera projection
+    this->cameraPositions[1].position = {0, -2.31, -48.9007};
+    this->cameraPositions[1].up = {0,1,0};
+    this->cameraPositions[1].back = {0,-2.71988,-37.0402};
 }
 
 bool Floor::update(Scene &scene, float dt) {
@@ -67,6 +79,30 @@ bool Floor::update(Scene &scene, float dt) {
         scene.camera->position.z = -20.0f;
         scene.camera->position.y = -15.0f;
         scene.camera->back.y = -0.8f;
+    }
+
+    else if(scene.keyboard[GLFW_KEY_C] && scene.keyboard[GLFW_KEY_L]){
+        scene.camera->up = this->cameraPositions[0].up;
+        scene.camera->back = this->cameraPositions[0].back;
+        scene.camera->position = this->cameraPositions[0].position;
+    }
+    else if(scene.keyboard[GLFW_KEY_C] && scene.keyboard[GLFW_KEY_U]){
+        scene.camera->up = this->cameraPositions[1].up;
+        scene.camera->back = this->cameraPositions[1].back;
+        scene.camera->position = this->cameraPositions[1].position;
+    }
+
+    else if(scene.keyboard[GLFW_KEY_S]) {
+
+        cout << scene.camera->back.x << endl;
+        cout << scene.camera->back.y << endl;
+        cout << scene.camera->back.z << endl;
+
+        cout << scene.camera->position.x << endl;
+        cout << scene.camera->position.y << endl;
+        cout << scene.camera->position.z << endl;
+
+        cout << endl;
     }
 
     generateModelMatrix();

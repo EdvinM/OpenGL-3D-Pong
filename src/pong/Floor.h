@@ -26,6 +26,14 @@ class Floor final : public Object {
         static std::vector<tinyobj::material_t> material;
         static std::map<std::string, int> material_map;
 
+        struct camera_pos {
+            glm::vec3 position;
+            glm::vec3 back;
+            glm::vec3 up;
+        };
+
+        camera_pos cameraPositions[];
+
     public:
         Floor();
 
