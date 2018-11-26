@@ -20,6 +20,10 @@ private:
   static std::unique_ptr<ppgso::Shader> shader;
   static std::unique_ptr<ppgso::Texture> texture;
 
+  //Things for mtl
+  static std::vector<tinyobj::material_t> material;
+  static std::map<std::string, int> material_map;
+
   // Delay fire and fire rate
   float fireDelay{0.0f};
   float fireRate{0.1f};

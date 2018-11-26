@@ -22,6 +22,10 @@ class Floor final : public Object {
         static std::unique_ptr<ppgso::Shader> shader;
         static std::unique_ptr<ppgso::Texture> texture;
 
+        //Things for mtl
+        static std::vector<tinyobj::material_t> material;
+        static std::map<std::string, int> material_map;
+
     public:
         Floor();
 

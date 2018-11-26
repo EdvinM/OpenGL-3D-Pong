@@ -15,10 +15,16 @@ unique_ptr<Mesh> Floor::mesh;
 unique_ptr<Texture> Floor::texture;
 unique_ptr<Shader> Floor::shader;
 
+map<std::string, int> Floor::material_map;
+vector<tinyobj::material_t> Floor::material;
+
 Floor::Floor() {
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
     if (!texture) texture = make_unique<Texture>(image::loadBMP("grass.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("uvmappedcube.obj");
+
+    ifstream mtl("uvmappedcube.mtl", std::ifstream::binary);
+    tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
 bool Floor::update(Scene &scene, float dt) {
@@ -68,6 +74,12 @@ bool Floor::update(Scene &scene, float dt) {
 }
 
 void Floor::render(Scene &scene) {
+
+    vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
+    vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
+    vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
+    float shininess = material.data()->shininess * 128;
+
     shader->use();
     shader->setUniform("LightDirection", scene.lightDirection);
     shader->setUniform("LightColor", scene.lightColor);
@@ -76,6 +88,11 @@ void Floor::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
+
+    shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
+    shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
+    shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
+    shader->setUniform("MaterialShininess", shininess);
 
     shader->setUniform("Texture", *texture);
     mesh->render();

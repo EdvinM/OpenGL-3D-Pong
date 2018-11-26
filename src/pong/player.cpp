@@ -16,6 +16,9 @@ unique_ptr<Mesh> Player::mesh;
 unique_ptr<Texture> Player::texture;
 unique_ptr<Shader> Player::shader;
 
+map<std::string, int> Player::material_map;
+vector<tinyobj::material_t> Player::material;
+
 Player::Player() {
   // Scale the default model
   scale.y *= 3.0f;
@@ -24,6 +27,10 @@ Player::Player() {
   if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!texture) texture = make_unique<Texture>(image::loadBMP("corsair.bmp"));
   if (!mesh) mesh = make_unique<Mesh>("paddle.obj");
+
+    //Load mtl files
+    ifstream mtl("paddle.mtl", std::ifstream::binary);
+    tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
 Player::Player(Scene &scene, int control_up, int control_down, int position) : Player() {
@@ -106,6 +113,11 @@ bool Player::update(Scene &scene, float dt) {
 
 void Player::render(Scene &scene) {
 
+    vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
+    vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
+    vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
+    float shininess = material.data()->shininess * 128;
+
     //Render player lifes
     for (auto& obj : this->lifes)
         obj->render(scene);
@@ -118,6 +130,11 @@ void Player::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
+
+    shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
+    shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
+    shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
+    shader->setUniform("MaterialShininess", shininess);
 
     shader->setUniform("Texture", *texture);
     mesh->render();

@@ -15,6 +15,9 @@ unique_ptr<Mesh> Life::mesh;
 unique_ptr<Texture> Life::texture;
 unique_ptr<Shader> Life::shader;
 
+map<std::string, int> Life::material_map;
+vector<tinyobj::material_t> Life::material;
+
 Life::Life() {
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
     if (!texture) texture = make_unique<Texture>(image::loadBMP("heart_lp.bmp"));
@@ -23,6 +26,10 @@ Life::Life() {
     this->time = 0.001f;
 
     this->active = true;
+
+    //Load mtl files
+    ifstream mtl("heart_lp.mtl", std::ifstream::binary);
+    tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
 bool Life::update(Scene &scene, float dt) {
@@ -30,8 +37,6 @@ bool Life::update(Scene &scene, float dt) {
     if(!this->active)
         return false;
 
-    // Rotate the object
-    //rotation = vec3({0, time, 0});
     time += 0.01f;
 
     generateModelMatrix();
@@ -39,6 +44,12 @@ bool Life::update(Scene &scene, float dt) {
 }
 
 void Life::render(Scene &scene) {
+
+    vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
+    vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
+    vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
+    float shininess = material.data()->shininess * 128;
+
     shader->use();
     shader->setUniform("LightDirection", scene.lightDirection);
     shader->setUniform("LightColor", scene.lightColor);
@@ -47,6 +58,11 @@ void Life::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
+
+    shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
+    shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
+    shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
+    shader->setUniform("MaterialShininess", shininess);
 
     shader->setUniform("Texture", *texture);
     mesh->render();

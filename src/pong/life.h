@@ -19,7 +19,19 @@ class Life final : public Object {
         static std::unique_ptr<ppgso::Shader> shader;
         static std::unique_ptr<ppgso::Texture> texture;
 
+        //Things for mtl
+        static std::vector<tinyobj::material_t> material;
+        static std::map<std::string, int> material_map;
+
         float time;
+
+        struct keyFrame {
+            glm::vec3 position;
+            glm::vec3 scale;
+            glm::vec3 rotation;
+
+            float time;
+        };
 
     public:
         Life();
