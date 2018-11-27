@@ -11,6 +11,7 @@
 #include "life.h"
 #include "Powerups/Magnify.h"
 #include "Powerups/QuakePU.h"
+#include "Powerups/Splitter.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -47,10 +48,12 @@ bool PowerupManager::update(Scene &scene, float dt) {
 //        quake->position = spawnPosition;
 //        scene.objects.push_back(move(quake));
 
-        auto life_ = make_unique<Life>();
-        life_->position = spawnPosition;
-        life_->scale *= 0.2f;
-        scene.objects.push_back(move(life_));
+//        auto life_ = make_unique<Life>();
+//        life_->position = spawnPosition;
+//        life_->scale *= 0.2f;
+//        scene.objects.push_back(move(life_));
+
+        scene.objects.push_back(make_unique<Splitter>(spawnPosition));
 
         this->spawned = true;
     }

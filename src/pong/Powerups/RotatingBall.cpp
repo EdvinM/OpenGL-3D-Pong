@@ -25,15 +25,26 @@ RotatingBall::RotatingBall() {
     // Initialize static resources if needed
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
     if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball.bmp"));
-    if (!mesh) mesh = make_unique<Mesh>("game_ball.obj");
+    if (!mesh) mesh = make_unique<Mesh>("soccerball.obj");
 
     //Load mtl files
-    ifstream mtl("game_ball.mtl", std::ifstream::binary);
+    ifstream mtl("soccerball.mtl", std::ifstream::binary);
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
+
+    this->scale *= 0.15f;
 }
 
 bool RotatingBall::update(Scene &scene, float dt) {
-    generateModelMatrix();
+    for (auto &obj : scene.objects) {
+        if (obj.get() == this) continue;
+
+        auto Ball = dynamic_cast<QuakePU*>(obj.get());
+
+        if(!Ball) continue;
+
+        this->modelMatrix = Ball->modelMatrix * glm::translate(mat4(1.0f), position) * glm::scale(mat4(1.0f), scale);
+    }
+
     return true;
 }
 

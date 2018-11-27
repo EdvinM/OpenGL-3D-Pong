@@ -41,7 +41,7 @@ Ball::Ball() {
   if (!mesh) mesh = make_unique<Mesh>("puck.obj");
 
   //Load mtl files
-  ifstream mtl("game_ball.mtl", std::ifstream::binary);
+  ifstream mtl("soccerball.mtl", std::ifstream::binary);
   tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 

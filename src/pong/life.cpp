@@ -47,8 +47,6 @@ Life::Life(glm::vec3 rotation, glm::vec3 scale, glm::vec3 position) : Life() {
     this->scale = scale;
     this->position = position;
 
-    cout << "debug" << endl;
-
     keyframeAnimation[0] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
     keyframeAnimation[1] = setKeyframe(100, {0, 5, 0}, this->scale, this->position);
     keyframeAnimation[2] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);

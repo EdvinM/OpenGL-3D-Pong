@@ -8,6 +8,7 @@
 #include <ppgso/ppgso.h>
 
 #include "RotatingBall.h"
+#include "QuakePU.h"
 #include "../Ball.h"
 #include "../scene.h"
 #include "../object.h"
@@ -17,8 +18,10 @@
 
 class Splitter : public Object {
 private:
-    Ball ball;
+    std::unique_ptr<QuakePU> ball;
     std::vector<std::unique_ptr<RotatingBall>> rotatingBalls;
+
+    bool spawned;
 
 public:
     Splitter();

@@ -7,6 +7,7 @@
 
 #include <ppgso/ppgso.h>
 
+#include "QuakePU.h"
 #include "../scene.h"
 #include "../object.h"
 #define PPGSO_ROTATINGBALL_H
