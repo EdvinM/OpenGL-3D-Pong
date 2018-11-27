@@ -20,6 +20,7 @@
 #include "border.h"
 #include "Floor.h"
 #include "life.h"
+#include "PowerupManager.h"
 
 using namespace std;
 using namespace glm;
@@ -89,6 +90,9 @@ private:
     floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
     floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
     scene.objects.push_back(move(floor));
+
+    //Add powerup manager to the scene
+    scene.objects.push_back(make_unique<PowerupManager>());
   }
 
 public:
