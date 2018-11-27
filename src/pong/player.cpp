@@ -112,8 +112,9 @@ void Player::render(Scene &scene) {
     float shininess = material.data()->shininess * 128;
 
     //Render player lifes
-    for (auto& obj : this->lifes)
+    for (auto& obj : this->lifes) {
         obj->render(scene);
+    }
 
     shader->use();
     shader->setUniform("LightDirection", scene.lightDirection);

@@ -101,7 +101,8 @@ bool Ball::update(Scene &scene, float dt) {
         if (player->lifes.size() > 0) {
 
           //Remove player life
-          player->lifes.pop_back();
+            player->lifes[player->lifes.size() - 1]->active = false;
+          //player->lifes.pop_back();
 
           //Destroy the ball
           this->offTheField = true;

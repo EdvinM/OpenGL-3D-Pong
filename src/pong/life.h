@@ -58,6 +58,8 @@ class Life final : public Object {
        */
         void render(Scene &scene) override;
 
+        void explode(Scene &scene, int pieces);
+        
         glm::vec3 linearInterpolation(glm::vec3 a, glm::vec3 b, float t);
 
         bool active;

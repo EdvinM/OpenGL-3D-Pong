@@ -60,8 +60,10 @@ vec3 Life::linearInterpolation(vec3 a, vec3 b, float t){
 
 bool Life::update(Scene &scene, float dt) {
 
-    if(!this->active)
+    if(!this->active) {
+        explode(scene, 10);
         return false;
+    }
 
     time += 0.01f;
 
@@ -104,4 +106,9 @@ void Life::render(Scene &scene) {
 
     shader->setUniform("Texture", *texture);
     mesh->render();
+}
+
+void Life::explode(Scene &scene, int pieces) {
+    // Generate smaller asteroids
+
 }

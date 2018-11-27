@@ -184,7 +184,7 @@ add_executable(pong
         src/pong/camera.cpp
         src/pong/Ball.cpp
         src/pong/player.cpp
-        src/pong/space.cpp src/pong/border.cpp src/pong/border.h src/pong/Floor.cpp src/pong/Floor.h src/pong/life.cpp src/pong/life.h)
+        src/pong/space.cpp src/pong/border.cpp src/pong/border.h src/pong/Floor.cpp src/pong/Floor.h src/pong/life.cpp src/pong/life.h src/pong/PowerUp.cpp src/pong/PowerUp.h)
 target_link_libraries(pong ppgso shaders)
 install(TARGETS pong DESTINATION .)
 
