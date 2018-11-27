@@ -32,7 +32,9 @@ Splitter::Splitter() {
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
 
     this->spawned = false;
+
     this->age = 0.0f;
+    this->duration = 5.0f;
 }
 
 Splitter::Splitter(vec3 position) : Splitter() {
@@ -58,9 +60,8 @@ bool Splitter::update(Scene &scene, float dt) {
 
     this->rotation = {0.0f, age, 0.0f};
 
-    if(age > 2.5f) {
+    if(this->age > this->duration)
         return false;
-    }
 
     if(!spawned) {
         this->spawned = true;

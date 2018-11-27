@@ -33,6 +33,8 @@ RotatingBall::RotatingBall() {
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
 
     this->scale *= 0.15f;
+    this->age = 0.0f;
+    this->duration = 5.0f;
 }
 
 bool RotatingBall::update(Scene &scene, float dt) {

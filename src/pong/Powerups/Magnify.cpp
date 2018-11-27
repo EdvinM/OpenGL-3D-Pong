@@ -30,14 +30,16 @@ Magnify::Magnify() {
     //Load mtl files
     ifstream mtl("magnifier.mtl", std::ifstream::binary);
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
+
+    this->age = 0.0f;
+    this->duration = 5.0f;
 }
 
 bool Magnify::update(Scene &scene, float dt) {
     age += dt;
 
-    if(age > 4.5f) {
+    if(this->age > this->duration)
         return false;
-    }
 
     generateModelMatrix();
     return true;

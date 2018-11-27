@@ -31,6 +31,9 @@ private:
     float age;
 
 public:
+    float duration;
+
+public:
     Splitter();
     Splitter(glm::vec3 position);
 

@@ -33,13 +33,16 @@ PowerupManager::PowerupManager() {
 
     auto magnifier = make_unique<Magnify> ();
     magnifier->scale *= 0.5f;
+    magnifier->duration = linearRand(4.5f, 6.0f);
     this->powerups.push_back(move(magnifier));
 
     auto quake = make_unique<QuakePU>();
+    quake->duration = linearRand(3.5f, 5.0f);
     this->powerups.push_back(move(quake));
 
     auto life_ = make_unique<Life>();
     life_->scale *= 0.2f;
+    //life_->duration = linearRand(5.0f, 7.0f);
     this->powerups.push_back(move(life_));
 }
 
@@ -57,7 +60,10 @@ bool PowerupManager::update(Scene &scene, float dt) {
 
         //If random is 3, that means splitter has to be spawned
         if(spawnPowerupIndex == 3) {
-            scene.objects.push_back(make_unique<Splitter>(spawnPosition));
+            auto splitter = make_unique<Splitter>(spawnPosition);
+            splitter->duration = linearRand(3.5f, 6.0f);
+
+            scene.objects.push_back(move(splitter));
         }
         else {
             auto &obj = this->powerups[spawnPowerupIndex];

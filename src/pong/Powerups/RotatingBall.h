@@ -25,6 +25,9 @@ private:
     float age{0.0f};
 
 public:
+    float duration;
+
+public:
     RotatingBall();
 
     /*!

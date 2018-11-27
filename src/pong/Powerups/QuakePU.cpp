@@ -30,6 +30,9 @@ QuakePU::QuakePU() {
     //Load mtl files
     ifstream mtl("skull.mtl", std::ifstream::binary);
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
+
+    this->age = 0.0f;
+    this->duration = 5.0f;
 }
 
 bool QuakePU::update(Scene &scene, float dt) {
@@ -37,9 +40,8 @@ bool QuakePU::update(Scene &scene, float dt) {
 
     this->rotation = {0.0f, age, 0.0f};
 
-    if(age > 3.5f) {
+    if(this->age > this->duration)
         return false;
-    }
 
     generateModelMatrix();
     return true;
