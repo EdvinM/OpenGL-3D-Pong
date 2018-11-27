@@ -38,6 +38,7 @@ class Life final : public Object {
             int keyframeCount = 4;
             float keyframeDuration = 0;
             int processedKeyframes = 0;
+            bool useWithKeyframes;
 
     public:
         Life();

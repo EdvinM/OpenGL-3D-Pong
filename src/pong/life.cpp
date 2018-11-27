@@ -33,9 +33,9 @@ Life::Life() {
     if (!texture) texture = make_unique<Texture>(image::loadBMP("heart_lp.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("heart_lp.obj");
 
+    this->useWithKeyframes = false;
     this->time = 0;
     this->duration = 0;
-
     this->active = true;
 
     //Load mtl files
@@ -47,6 +47,8 @@ Life::Life(glm::vec3 rotation, glm::vec3 scale, glm::vec3 position) : Life() {
     this->rotation = rotation;
     this->scale = scale;
     this->position = position;
+
+    this->useWithKeyframes = true;
 
     keyframeAnimation[0] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
     keyframeAnimation[1] = setKeyframe(100, {0, 5, 0}, this->scale, this->position);
@@ -71,19 +73,21 @@ bool Life::update(Scene &scene, float dt) {
     if(this->duration != 0 && this->time > this->duration)
         return false;
 
-    Keyframe current = keyframeAnimation[processedKeyframes];
-    Keyframe next = keyframeAnimation[(processedKeyframes + 1) % keyframeCount];
+    if(this->useWithKeyframes) {
+        Keyframe current = keyframeAnimation[processedKeyframes];
+        Keyframe next = keyframeAnimation[(processedKeyframes + 1) % keyframeCount];
 
-    float t = keyframeDuration / current.duration;
+        float t = keyframeDuration / current.duration;
 
-    position = linearInterpolation(current.keyframePosition, next.keyframePosition, t);
-    scale = linearInterpolation(current.keyframeScale, next.keyframeScale, t);
-    rotation = linearInterpolation(current.keyframeRotation, next.keyframeRotation, t);
+        position = linearInterpolation(current.keyframePosition, next.keyframePosition, t);
+        scale = linearInterpolation(current.keyframeScale, next.keyframeScale, t);
+        rotation = linearInterpolation(current.keyframeRotation, next.keyframeRotation, t);
 
-    keyframeDuration++;
-    if (keyframeDuration >= current.duration) {
-        keyframeDuration = 0;
-        processedKeyframes = (processedKeyframes + 1) % keyframeCount;
+        keyframeDuration++;
+        if (keyframeDuration >= current.duration) {
+            keyframeDuration = 0;
+            processedKeyframes = (processedKeyframes + 1) % keyframeCount;
+        }
     }
 
     generateModelMatrix();
