@@ -4,6 +4,7 @@
 
 #include <glm/gtc/random.hpp>
 #include "Magnify.h"
+#include "../Ball.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -40,6 +41,21 @@ bool Magnify::update(Scene &scene, float dt) {
 
     if(this->age > this->duration)
         return false;
+
+    for (auto &obj : scene.objects) {
+        if (obj.get() == this) continue;
+
+        auto ball = dynamic_cast<Ball*>(obj.get());
+
+        if(!ball) continue;
+
+        if(distance(position, ball->position) <= scale.x) {
+            ball->scale.x *= 2.0f;
+            ball->scale.y *= 2.0f;
+
+            this->age = this->duration * 2;
+        }
+    }
 
     generateModelMatrix();
     return true;

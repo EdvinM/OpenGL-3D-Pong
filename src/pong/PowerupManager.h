@@ -1,15 +1,13 @@
 //
 // Created by Edvin Mako on 27/11/2018.
 //
-
-#ifndef PPGSO_POWERUPMANAGER_H
+#pragma once
 #include <memory>
 
 #include <ppgso/ppgso.h>
 
 #include "scene.h"
 #include "object.h"
-#define PPGSO_POWERUPMANAGER_H
 
 
 class PowerupManager : public Object {
@@ -22,8 +20,6 @@ private:
     //Things for mtl
     static std::vector<tinyobj::material_t> material;
     static std::map<std::string, int> material_map;
-
-    std::vector<std::unique_ptr<Object>> powerups;
 
     float time;
 
@@ -43,7 +39,6 @@ public:
      * @param scene Scene to render in
      */
     void render(Scene &scene) override;
+
+    std::unique_ptr<Object> getPowerUp(glm::vec3 spawnPosition, int number);
 };
-
-
-#endif //PPGSO_POWERUPMANAGER_H

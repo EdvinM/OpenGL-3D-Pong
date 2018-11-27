@@ -30,20 +30,6 @@ vector<tinyobj::material_t> PowerupManager::material;
 
 PowerupManager::PowerupManager() {
     this->time = 0.0f;
-
-    auto magnifier = make_unique<Magnify> ();
-    magnifier->scale *= 0.5f;
-    magnifier->duration = linearRand(4.5f, 6.0f);
-    this->powerups.push_back(move(magnifier));
-
-    auto quake = make_unique<QuakePU>();
-    quake->duration = linearRand(3.5f, 5.0f);
-    this->powerups.push_back(move(quake));
-
-    auto life_ = make_unique<Life>();
-    life_->scale *= 0.2f;
-    //life_->duration = linearRand(5.0f, 7.0f);
-    this->powerups.push_back(move(life_));
 }
 
 bool PowerupManager::update(Scene &scene, float dt) {
@@ -53,27 +39,46 @@ bool PowerupManager::update(Scene &scene, float dt) {
     if(time > 10.0f) {
         time = 0.0f;
 
-        int spawnPowerupIndex = (int)(rand() % (this->powerups.size() + 1));
+        int spawnPowerupIndex = rand() % 4;
 
         //Generate spawn position for the attribute
         vec3 spawnPosition = {linearRand(-10.0f, 10.0f), linearRand(-10.0f, 10.0f), -0.05f};
 
-        //If random is 3, that means splitter has to be spawned
-        if(spawnPowerupIndex == 3) {
-            auto splitter = make_unique<Splitter>(spawnPosition);
-            splitter->duration = linearRand(3.5f, 6.0f);
-
-            scene.objects.push_back(move(splitter));
-        }
-        else {
-            auto &obj = this->powerups[spawnPowerupIndex];
-            obj->position = spawnPosition;
-
-            scene.objects.push_back(move(obj));
-        }
+        scene.objects.push_back(getPowerUp(spawnPosition, spawnPowerupIndex));
     }
 
     return true;
+}
+
+std::unique_ptr<Object> PowerupManager::getPowerUp(vec3 spawnPosition, int number) {
+    switch(number) {
+        case 0: {
+            auto powerup = make_unique<Magnify>();
+            powerup->position = spawnPosition;
+            powerup->scale *= 0.5f;
+            powerup->duration = linearRand(4.5f, 6.0f);
+
+            return powerup;
+        }
+        case 1: {
+            auto powerup2 = make_unique<QuakePU>();
+            powerup2->position = spawnPosition;
+            powerup2->duration = linearRand(3.5f, 5.0f);
+            return powerup2;
+        }
+        case 2: {
+            auto powerup3 = make_unique<Life>();
+            powerup3->position = spawnPosition;
+            powerup3->scale *= 0.2f;
+            powerup3->duration = linearRand(5.0f, 7.0f);
+            return powerup3;
+        }
+        default: {
+            auto powerup4 = make_unique<Splitter>(spawnPosition);
+            powerup4->duration = linearRand(3.5f, 6.0f);
+            return powerup4;
+        }
+    }
 }
 
 void PowerupManager::render(Scene &scene) { }
