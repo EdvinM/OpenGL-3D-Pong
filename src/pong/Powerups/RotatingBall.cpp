@@ -4,6 +4,7 @@
 
 #include <glm/gtc/random.hpp>
 #include "RotatingBall.h"
+#include "Splitter.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -35,14 +36,22 @@ RotatingBall::RotatingBall() {
 }
 
 bool RotatingBall::update(Scene &scene, float dt) {
+
+    bool ballOnScreen = false;
     for (auto &obj : scene.objects) {
         if (obj.get() == this) continue;
 
-        auto Ball = dynamic_cast<QuakePU*>(obj.get());
+        auto Ball = dynamic_cast<Splitter*>(obj.get());
 
         if(!Ball) continue;
 
         this->modelMatrix = Ball->modelMatrix * glm::translate(mat4(1.0f), position) * glm::scale(mat4(1.0f), scale);
+        ballOnScreen = true;
+    }
+
+    //Delete rotating objects if the main object was also deleted
+    if(!ballOnScreen) {
+        return false;
     }
 
     return true;

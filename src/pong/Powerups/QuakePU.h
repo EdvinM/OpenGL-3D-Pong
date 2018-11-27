@@ -1,16 +1,13 @@
 //
 // Created by Edvin Mako on 27/11/2018.
 //
-
-#ifndef PPGSO_QUAKEPU_H
+#pragma once
 #include <memory>
 
 #include <ppgso/ppgso.h>
 
 #include "../scene.h"
 #include "../object.h"
-#define PPGSO_QUAKEPU_H
-
 
 class QuakePU : public Object {
 private:
@@ -43,6 +40,3 @@ public:
      */
     void render(Scene &scene) override;
 };
-
-
-#endif //PPGSO_QUAKEPU_H

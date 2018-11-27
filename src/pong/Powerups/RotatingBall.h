@@ -1,16 +1,13 @@
 //
 // Created by Edvin Mako on 27/11/2018.
 //
-
-#ifndef PPGSO_ROTATINGBALL_H
+#pragma once
 #include <memory>
 
 #include <ppgso/ppgso.h>
 
-#include "QuakePU.h"
 #include "../scene.h"
 #include "../object.h"
-#define PPGSO_ROTATINGBALL_H
 
 
 class RotatingBall : public Object {
@@ -44,6 +41,3 @@ public:
      */
     void render(Scene &scene) override;
 };
-
-
-#endif //PPGSO_ROTATINGBALL_H
