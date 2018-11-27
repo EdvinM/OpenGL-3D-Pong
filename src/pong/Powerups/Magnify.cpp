@@ -35,7 +35,7 @@ Magnify::Magnify() {
 bool Magnify::update(Scene &scene, float dt) {
     age += dt;
 
-    if(age > 10.f) {
+    if(age > 4.5f) {
         return false;
     }
 

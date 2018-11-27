@@ -58,7 +58,7 @@ bool Splitter::update(Scene &scene, float dt) {
 
     this->rotation = {0.0f, age, 0.0f};
 
-    if(age > 4.f) {
+    if(age > 2.5f) {
         return false;
     }
 

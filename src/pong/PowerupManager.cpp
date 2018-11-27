@@ -29,35 +29,45 @@ map<std::string, int> PowerupManager::material_map;
 vector<tinyobj::material_t> PowerupManager::material;
 
 PowerupManager::PowerupManager() {
+    this->time = 0.0f;
 
-    this->spawned = false;
+    auto magnifier = make_unique<Magnify> ();
+    magnifier->scale *= 0.5f;
+    this->powerups.push_back(move(magnifier));
+
+    auto quake = make_unique<QuakePU>();
+    this->powerups.push_back(move(quake));
+
+    auto life_ = make_unique<Life>();
+    life_->scale *= 0.2f;
+    this->powerups.push_back(move(life_));
 }
 
 bool PowerupManager::update(Scene &scene, float dt) {
 
-    if(!this->spawned) {
+    time += dt;
 
+    if(time > 10.0f) {
+        time = 0.0f;
+
+        int spawnPowerupIndex = (int)(rand() % (this->powerups.size() + 1));
+
+        //Generate spawn position for the attribute
         vec3 spawnPosition = {linearRand(-10.0f, 10.0f), linearRand(-10.0f, 10.0f), -0.05f};
 
-//        auto magnifier = make_unique<Magnify>();
-//        magnifier->position = spawnPosition;
-//        magnifier->scale *= 0.5f;
-//        scene.objects.push_back(move(magnifier));
+        //If random is 3, that means splitter has to be spawned
+        if(spawnPowerupIndex == 3) {
+            scene.objects.push_back(make_unique<Splitter>(spawnPosition));
+        }
+        else {
+            auto &obj = this->powerups[spawnPowerupIndex];
+            obj->position = spawnPosition;
 
-//        auto quake = make_unique<QuakePU>();
-//        quake->position = spawnPosition;
-//        scene.objects.push_back(move(quake));
-
-//        auto life_ = make_unique<Life>();
-//        life_->position = spawnPosition;
-//        life_->scale *= 0.2f;
-//        scene.objects.push_back(move(life_));
-
-        scene.objects.push_back(make_unique<Splitter>(spawnPosition));
-
-        this->spawned = true;
+            scene.objects.push_back(move(obj));
+        }
     }
 
+    return true;
 }
 
 void PowerupManager::render(Scene &scene) { }

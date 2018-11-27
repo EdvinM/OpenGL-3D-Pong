@@ -23,7 +23,9 @@ private:
     static std::vector<tinyobj::material_t> material;
     static std::map<std::string, int> material_map;
 
-    int spawned;
+    std::vector<std::unique_ptr<Object>> powerups;
+
+    float time;
 
 public:
     PowerupManager();

@@ -37,7 +37,7 @@ bool QuakePU::update(Scene &scene, float dt) {
 
     this->rotation = {0.0f, age, 0.0f};
 
-    if(age > 20.f) {
+    if(age > 3.5f) {
         return false;
     }
 
