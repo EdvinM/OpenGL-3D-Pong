@@ -70,7 +70,7 @@ private:
 
     //Add ball to the game
     auto ball = make_unique<Ball>();
-    ball->position.z = 1.0f;
+    ball->position.z = -5.0f;
     ball->scale = {1.5f, 1.5f, 1.0f};
     scene.objects.push_back(move(ball));
 

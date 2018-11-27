@@ -56,6 +56,10 @@ public:
 
     glm::vec3 speed;
 
+    float gravity = -9.8f;
+
+    bool offTheField;
+
 private:
 };
 

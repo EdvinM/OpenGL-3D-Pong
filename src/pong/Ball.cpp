@@ -30,6 +30,8 @@ Ball::Ball() {
     speed.y *= -1;
   }
 
+  this->offTheField = false;
+
   rotation = {0.0f, 2.0f, 0.0f};
   rotMomentum = {0.0f, linearRand(1.0f, 3.0f), 0.0f};
 
@@ -53,66 +55,75 @@ bool Ball::update(Scene &scene, float dt) {
   // Rotate the object
   rotation += rotMomentum * dt;
 
-  float x_deviation_value = 0;
+  if(this->offTheField) {
+    position.z += 0.035f;
+    scale -= dt;
 
-  //Check for collision with screen boundaries
-  if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
-    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
-
-    if(speed.y < 0)
-      x_deviation_value *= -1;
-
-    speed.y *= (-1);
-    position.y += x_deviation_value;
+    if(position.z >= 20.0f)
+      return false;
   }
+  else {
+    float x_deviation_value = 0;
 
-  if(position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
-    x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
+    //Check for collision with screen boundaries
+    if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
+      x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
 
-    if(speed.y < 0)
-      x_deviation_value *= -1;
+      if(speed.y < 0)
+        x_deviation_value *= -1;
 
-    speed.y *= (-1);
-    position.y += x_deviation_value;
-  }
-
-  // Collide with scene
-  for (auto &obj : scene.objects) {
-    // Ignore self in scene
-    if (obj.get() == this) continue;
-
-    // We only need to collide with asteroids and projectiles, ignore other objects
-    auto ball = dynamic_cast<Ball*>(obj.get());
-    auto player = dynamic_cast<Player*>(obj.get());
-    if (!ball && !player) continue;
-
-    if((position.x >= (Scene::WIDTH / 100.0) && player->pos == 1) || (position.x <= -(Scene::WIDTH / 100.0) && player->pos == -1)) {
-      if(player->lifes.size() > 0) {
-
-        //Remove player life
-        player->lifes.pop_back();
-
-        //Destroy the ball
-        return false;
-      }
+      speed.y *= (-1);
+      position.y += x_deviation_value;
     }
 
-    if (distance(position, player->position) <= player->scale.y) {
+    if(position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
+      x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
 
-      if(!player->mutex) {
-        float dx = (player->position.x * player->scale.x) - (position.x * scale.x);
-        float dy = (player->position.y * player->scale.y) - (position.y * scale.y);
+      if(speed.y < 0)
+        x_deviation_value *= -1;
 
-        float angle = atan2(dy, dx);
-
-        speed.x *= -1;
-        speed.y = (15.0f * -sin(angle));
-
-        player->mutex = true;
-      }
+      speed.y *= (-1);
+      position.y += x_deviation_value;
     }
-    else {
-      player->mutex = false;
+
+    // Collide with scene
+    for (auto &obj : scene.objects) {
+      // Ignore self in scene
+      if (obj.get() == this) continue;
+
+      // We only need to collide with asteroids and projectiles, ignore other objects
+      auto ball = dynamic_cast<Ball *>(obj.get());
+      auto player = dynamic_cast<Player *>(obj.get());
+      if (!ball && !player) continue;
+
+      if ((position.x >= ((Scene::WIDTH / 100.0) + scale.x) && player->pos == 1) ||
+          (position.x <= -((Scene::WIDTH / 100.0) + scale.x) && player->pos == -1)) {
+        if (player->lifes.size() > 0) {
+
+          //Remove player life
+          player->lifes.pop_back();
+
+          //Destroy the ball
+          this->offTheField = true;
+        }
+      }
+
+      if (distance(position, player->position) <= player->scale.y) {
+
+        if (!player->mutex) {
+          float dx = (player->position.x * player->scale.x) - (position.x * scale.x);
+          float dy = (player->position.y * player->scale.y) - (position.y * scale.y);
+
+          float angle = atan2(dy, dx);
+
+          speed.x *= -1;
+          speed.y = (15.0f * -sin(angle));
+
+          player->mutex = true;
+        }
+      } else {
+        player->mutex = false;
+      }
     }
   }
 
