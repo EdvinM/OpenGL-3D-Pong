@@ -41,13 +41,13 @@ Player::Player(Scene &scene, int control_up, int control_down, int position) : P
 
   this->pos           = position;
 
-    auto life = make_unique<Life>(vec3({0, 0, 0}), vec3({1* 0.05f,1* 0.05f,1* 0.05f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 0, 0}));
+    auto life = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 0, 0}));
     lifes.push_back(move(life));
 
-    auto life2 = make_unique<Life>(vec3({0, 0, 0}), vec3({1* 0.05f,1* 0.05f,1* 0.05f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 2.5f, 0}));
+    auto life2 = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 2.5f, 0}));
     lifes.push_back(move(life2));
 
-    auto life3 = make_unique<Life>(vec3({0, 0, 0}), vec3({1* 0.05f,1* 0.05f,1* 0.05f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, -2.5f, 0}));
+    auto life3 = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, -2.5f, 0}));
     lifes.push_back(move(life3));
 
     this->mutex = false;

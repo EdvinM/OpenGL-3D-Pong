@@ -47,6 +47,8 @@ Life::Life(glm::vec3 rotation, glm::vec3 scale, glm::vec3 position) : Life() {
     this->scale = scale;
     this->position = position;
 
+    cout << "debug" << endl;
+
     keyframeAnimation[0] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
     keyframeAnimation[1] = setKeyframe(100, {0, 5, 0}, this->scale, this->position);
     keyframeAnimation[2] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
@@ -69,10 +71,13 @@ bool Life::update(Scene &scene, float dt) {
 
     Keyframe current = keyframeAnimation[processedKeyframes];
     Keyframe next = keyframeAnimation[(processedKeyframes + 1) % keyframeCount];
+
     float t = keyframeDuration / current.duration;
+
     position = linearInterpolation(current.keyframePosition, next.keyframePosition, t);
     scale = linearInterpolation(current.keyframeScale, next.keyframeScale, t);
     rotation = linearInterpolation(current.keyframeRotation, next.keyframeRotation, t);
+
     keyframeDuration++;
     if (keyframeDuration >= current.duration) {
         keyframeDuration = 0;

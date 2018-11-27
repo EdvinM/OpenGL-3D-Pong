@@ -7,6 +7,8 @@
 
 #include <ppgso/ppgso.h>
 
+#include "RotatingBall.h"
+#include "../Ball.h"
 #include "../scene.h"
 #include "../object.h"
 
@@ -15,17 +17,12 @@
 
 class Splitter : public Object {
 private:
-    // Static resources (Shared between instances)
-    static std::unique_ptr<ppgso::Mesh> mesh;
-    static std::unique_ptr<ppgso::Shader> shader;
-    static std::unique_ptr<ppgso::Texture> texture;
-
-    //Things for mtl
-    static std::vector<tinyobj::material_t> material;
-    static std::map<std::string, int> material_map;
+    Ball ball;
+    std::vector<std::unique_ptr<RotatingBall>> rotatingBalls;
 
 public:
     Splitter();
+    Splitter(glm::vec3 position);
 
     /*!
    * Update asteroid
