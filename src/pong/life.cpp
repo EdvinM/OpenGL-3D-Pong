@@ -33,7 +33,8 @@ Life::Life() {
     if (!texture) texture = make_unique<Texture>(image::loadBMP("heart_lp.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("heart_lp.obj");
 
-    this->time = 0.001f;
+    this->time = 0;
+    this->duration = 0;
 
     this->active = true;
 
@@ -65,7 +66,10 @@ bool Life::update(Scene &scene, float dt) {
         return false;
     }
 
-    time += 0.01f;
+    time += dt;
+
+    if(this->duration != 0 && this->time > this->duration)
+        return false;
 
     Keyframe current = keyframeAnimation[processedKeyframes];
     Keyframe next = keyframeAnimation[(processedKeyframes + 1) % keyframeCount];

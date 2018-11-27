@@ -69,7 +69,6 @@ std::unique_ptr<Object> PowerupManager::getPowerUp(vec3 spawnPosition, int numbe
         case 2: {
             auto powerup3 = make_unique<Life>();
             powerup3->position = spawnPosition;
-            powerup3->scale *= 0.2f;
             powerup3->duration = linearRand(5.0f, 7.0f);
             return powerup3;
         }
