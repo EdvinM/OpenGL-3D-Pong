@@ -34,6 +34,8 @@ private:
 
     bool can_move_down;
 
+    bool spawnLifes;
+
 public:
     static std::unique_ptr<ppgso::Texture> texture;
     int pos;

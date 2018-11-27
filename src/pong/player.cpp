@@ -38,17 +38,9 @@ Player::Player(Scene &scene, int control_up, int control_down, int position) : P
 
   this->can_move_up   = true;
   this->can_move_down = true;
+  this->spawnLifes      = true;
 
   this->pos           = position;
-
-    auto life = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 0, 0}));
-    lifes.push_back(move(life));
-
-    auto life2 = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 2.5f, 0}));
-    lifes.push_back(move(life2));
-
-    auto life3 = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, -2.5f, 0}));
-    lifes.push_back(move(life3));
 
     this->mutex = false;
 }
@@ -57,10 +49,15 @@ bool Player::update(Scene &scene, float dt) {
   // Fire delay increment
   fireDelay += dt;
 
-  //Updated rendered player lifes
-    for (auto& obj : this->lifes) {
-        obj->update(scene, dt);
-    }
+  if(this->spawnLifes) {
+      this->spawnLifes = false;
+
+      auto life = make_unique<Life>(vec3({0.0f, 0.0f, 0.0f}), vec3({0.5f,0.5f,0.5}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 0.0f, 0.0f}));
+      scene.objects.push_back(move(life));
+
+      scene.objects.push_back(make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, 2.5f, 0})));
+      scene.objects.push_back(make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5f}), vec3({((Scene::WIDTH) / 100.0f + 2.0f) * position, -2.5f, 0})));
+  }
 
   // Keyboard controls
   if(scene.keyboard[this->control_up] && this->can_move_up) {
@@ -110,11 +107,6 @@ void Player::render(Scene &scene) {
     vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
     vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
     float shininess = material.data()->shininess * 128;
-
-    //Render player lifes
-    for (auto& obj : this->lifes) {
-        obj->render(scene);
-    }
 
     shader->use();
     shader->setUniform("LightDirection", scene.lightDirection);
