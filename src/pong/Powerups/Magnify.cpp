@@ -49,7 +49,7 @@ bool Magnify::update(Scene &scene, float dt) {
 
         if(!ball) continue;
 
-        if(distance(position, ball->position) <= scale.x) {
+        if(distance(position, ball->position) <= (scale.x * 2)) {
             ball->scale.x *= 2.0f;
             ball->scale.y *= 2.0f;
 

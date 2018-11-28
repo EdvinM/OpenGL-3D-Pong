@@ -11,6 +11,7 @@
 
 #include "scene.h"
 #include "object.h"
+#include "Ball.h"
 
 struct Keyframe {
     glm::vec3 keyframePosition = {0, 0, 0};

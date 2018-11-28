@@ -3,6 +3,7 @@
 //
 
 #include "life.h"
+#include "player.h"
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 
@@ -87,6 +88,39 @@ bool Life::update(Scene &scene, float dt) {
         if (keyframeDuration >= current.duration) {
             keyframeDuration = 0;
             processedKeyframes = (processedKeyframes + 1) % keyframeCount;
+        }
+    }
+    else {
+
+        for (auto &obj : scene.objects) {
+            if (obj.get() == this) continue;
+
+            auto ball = dynamic_cast<Ball*>(obj.get());
+
+            if(!ball) continue;
+
+            if (distance(position, ball->position) <= (scale.x * 2)) {
+
+                for (auto &obj : scene.objects) {
+                    if (obj.get() == this) continue;
+
+                    auto player = dynamic_cast<Player*>(obj.get());
+
+                    if (!player) continue;
+
+                    if(player->pos == ball->lastHitByPlayerId) {
+
+                        auto life = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5}), vec3({((Scene::WIDTH) / 100.0f + 1.3f) * player->pos, (player->lifes[player->lifes.size() - 1]->position.y) - 2.5f, 0}));
+                        player->lifes.push_back(move(life));
+
+                        //Destroy the heart
+                        this->time += this->duration * 2;
+                        break;
+                    }
+                }
+            }
+
+            break;
         }
     }
 

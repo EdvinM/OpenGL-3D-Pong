@@ -7,6 +7,7 @@
 // - Controls: LEFT, RIGHT, "R" to reset, SPACE to fire
 
 #include <iostream>
+#include <memory>
 #include <map>
 #include <list>
 

@@ -30,6 +30,7 @@ Ball::Ball() {
     speed.y *= -1;
   }
 
+  this->lastHitByPlayerId = 0;
   this->offTheField = false;
 
   rotation = {0.0f, 2.0f, 0.0f};
@@ -119,6 +120,7 @@ bool Ball::update(Scene &scene, float dt) {
           speed.y = (15.0f * -sin(angle));
 
           player->mutex = true;
+          this->lastHitByPlayerId = player->pos;
         }
       } else {
         player->mutex = false;

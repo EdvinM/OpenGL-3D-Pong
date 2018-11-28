@@ -56,7 +56,7 @@ public:
 
     glm::vec3 speed;
 
-    float gravity = -9.8f;
+    int lastHitByPlayerId;
 
     bool offTheField;
 
