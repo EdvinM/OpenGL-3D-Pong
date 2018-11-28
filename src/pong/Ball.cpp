@@ -93,9 +93,8 @@ bool Ball::update(Scene &scene, float dt) {
       if (obj.get() == this) continue;
 
       // We only need to collide with asteroids and projectiles, ignore other objects
-      auto ball = dynamic_cast<Ball *>(obj.get());
       auto player = dynamic_cast<Player *>(obj.get());
-      if (!ball && !player) continue;
+      if (!player) continue;
 
       if ((position.x >= ((Scene::WIDTH / 100.0) + scale.x) && player->pos == 1) ||
           (position.x <= -((Scene::WIDTH / 100.0) + scale.x) && player->pos == -1)) {

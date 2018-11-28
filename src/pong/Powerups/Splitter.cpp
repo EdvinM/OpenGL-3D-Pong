@@ -46,9 +46,10 @@ Splitter::Splitter(vec3 position) : Splitter() {
 
         //Blbne pre 180 stupnov
         if(sin(90 * i * PI / 180) >= -0.1 && sin(90 * i * PI / 180) <= 0.1)
-            rotatingBall->position.y = 1.5f * cos(90 * i * PI / 180);
-        else
-            rotatingBall->position.x = 1.5f * sin(90 * i * PI / 180);
+            rotatingBall->position.y = 1.2f * cos(90 * i * PI / 180);
+        else {
+            rotatingBall->position.x = 1.2f * sin(90 * i * PI / 180);
+        }
 
         this->rotatingBalls.push_back(move(rotatingBall));
     }
@@ -69,6 +70,33 @@ bool Splitter::update(Scene &scene, float dt) {
         for (auto& obj : this->rotatingBalls) {
             scene.objects.push_back(move(obj));
         }
+    }
+
+    for (auto &obj : scene.objects) {
+        if (obj.get() == this) continue;
+
+        auto ball = dynamic_cast<Ball*>(obj.get());
+
+        if (!ball) continue;
+
+        if(distance(position, ball->position) <= (scale.x * 2.0)) {
+
+            for(int i = 0; i < this->rotatingBalls.size(); i++) {
+                //Add ball to the game
+                auto n_ball = make_unique<Ball>();
+                n_ball->position = ball->position;
+                n_ball->position.x += linearRand(1.5f, 2.5f);
+                n_ball->position.y += linearRand(1.5f, 2.5f);
+                n_ball->scale = ball->scale;
+
+                scene.objects.push_back(move(n_ball));
+            }
+
+            //Destroy splitter
+            this->age += this->duration * 2;
+            break;
+        }
+
     }
 
     generateModelMatrix();

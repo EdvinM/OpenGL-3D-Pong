@@ -44,7 +44,7 @@ bool PowerupManager::update(Scene &scene, float dt) {
         //Generate spawn position for the attribute
         vec3 spawnPosition = {linearRand(-10.0f, 10.0f), linearRand(-10.0f, 10.0f), -0.05f};
 
-        scene.objects.push_back(getPowerUp(spawnPosition, 0));
+        scene.objects.push_back(getPowerUp(spawnPosition, 4));
     }
 
     return true;
