@@ -4,7 +4,7 @@
 
 #include <glm/gtc/random.hpp>
 #include "Magnify.h"
-#include "player.h"
+#include "../player.h"
 #include "../Ball.h"
 
 #include <shaders/diffuse_vert_glsl.h>
@@ -59,12 +59,14 @@ bool Magnify::update(Scene &scene, float dt) {
 
                 if (!player) continue;
 
-                player->scale.x *= 2.0f;
-                player->scale.y *= 2.0f;
+                if(player->pos == ball->lastHitByPlayerId) {
+                    player->scale.x *= 2.0f;
+                    player->scale.y *= 2.0f;
 
-                //Destroy this attribute
-                this->age += this->duration * 2;
-                break;
+                    //Destroy this attribute
+                    this->age += this->duration * 2;
+                    break;
+                }
             }
 
             break;
