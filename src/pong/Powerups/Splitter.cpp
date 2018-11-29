@@ -35,10 +35,9 @@ Splitter::Splitter() {
 
     this->age = 0.0f;
     this->duration = 5.0f;
-}
 
-Splitter::Splitter(vec3 position) : Splitter() {
-    this->position = position;
+
+    this->position = {linearRand(-((Scene::WIDTH) / 100.0f) + 2.5f, ((Scene::WIDTH) / 100.0f)) - 2.5f, ((Scene::WIDTH) / 100.0f) - 2.5f, 0.0f};
 
     int random = rand() % 4 + 1;
     for(int i = 0; i < random; i++) {
@@ -47,13 +46,15 @@ Splitter::Splitter(vec3 position) : Splitter() {
         //Blbne pre 180 stupnov
         if(sin(90 * i * PI / 180) >= -0.1 && sin(90 * i * PI / 180) <= 0.1)
             rotatingBall->position.y = 1.2f * cos(90 * i * PI / 180);
-        else {
+        else
             rotatingBall->position.x = 1.2f * sin(90 * i * PI / 180);
-        }
 
         this->rotatingBalls.push_back(move(rotatingBall));
     }
-};
+
+    addKeyFrame(600, this->rotation, this->scale, {this->position.x, -((Scene::WIDTH) / 100.0f) + 2.5f, this->position.z});
+    addKeyFrame(600, this->rotation, this->scale, {this->position.x, ((Scene::WIDTH) / 100.0f) - 2.5f, this->position.z});
+}
 
 bool Splitter::update(Scene &scene, float dt) {
 
@@ -99,6 +100,7 @@ bool Splitter::update(Scene &scene, float dt) {
 
     }
 
+    updateKeyFrame();
     generateModelMatrix();
     return true;
 }

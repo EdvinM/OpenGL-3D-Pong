@@ -58,24 +58,25 @@ public:
    */
   virtual void onClick(Scene &scene) {};
 
-  // Object properties
+  void addKeyFrame(int duration, glm::vec3 keyFrameRotation, glm::vec3 keyFrameScale, glm::vec3 keyFramePosition);
+
+    // Object properties
   glm::vec3 position{0,0,0};
-  glm::vec3 rotation{0,0,0};
-  glm::vec3 scale{1,1,1};
+    glm::vec3 rotation{0,0,0};
+    glm::vec3 scale{1,1,1};
+
   glm::mat4 modelMatrix{1};
+    float duration;
 
-  float duration;
   float effectDuration;
-
 protected:
+
   /*!
    * Generate modelMatrix from position, rotation and scale
    */
   void generateModelMatrix();
 
   void updateKeyFrame();
-
-  void addKeyFrame(int duration, glm::vec3 keyFrameRotation, glm::vec3 keyFrameScale, glm::vec3 keyFramePosition);
 
   glm::vec3 linearInterpolation(glm::vec3 a, glm::vec3 b, float t);
 };

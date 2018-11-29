@@ -53,9 +53,7 @@ bool PowerupManager::update(Scene &scene, float dt) {
 std::unique_ptr<Object> PowerupManager::getPowerUp(vec3 spawnPosition, int number) {
     switch(number) {
         case 0: {
-            auto powerup = make_unique<Magnify>();
-            powerup->position = spawnPosition;
-            powerup->scale *= 0.5f;
+            auto powerup = make_unique<Magnify>(vec3({1.0f * 0.5f,1.0f * 0.5f,1.0f * 0.5f}));
             powerup->duration = linearRand(4.5f, 6.0f);
             powerup->effectDuration = linearRand(25.0f, 30.0f);
             return powerup;
@@ -74,7 +72,7 @@ std::unique_ptr<Object> PowerupManager::getPowerUp(vec3 spawnPosition, int numbe
             return powerup3;
         }
         default: {
-            auto powerup4 = make_unique<Splitter>(spawnPosition);
+            auto powerup4 = make_unique<Splitter>();
             powerup4->duration = linearRand(3.5f, 6.0f);
             return powerup4;
         }

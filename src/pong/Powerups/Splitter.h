@@ -32,7 +32,6 @@ private:
 
 public:
     Splitter();
-    Splitter(glm::vec3 position);
 
     /*!
    * Update asteroid

@@ -39,6 +39,15 @@ Magnify::Magnify() {
     this->magnifiedPlayerId = 0;
 }
 
+Magnify::Magnify(vec3 scale) : Magnify() {
+    this->scale = scale;
+    this->position = {linearRand(-((Scene::WIDTH) / 100.0f) + 3.5f, ((Scene::WIDTH) / 100.0f)) - 3.5f, ((Scene::WIDTH) / 100.0f) - 2.5f, 0.0f};
+
+    addKeyFrame(600, this->rotation, this->scale, {this->position.x, -((Scene::WIDTH) / 100.0f) + 2.5f, this->position.z});
+    addKeyFrame(600, this->rotation, this->scale, {this->position.x, ((Scene::WIDTH) / 100.0f) - 2.5f, this->position.z});
+}
+
+
 bool Magnify::update(Scene &scene, float dt) {
     age += dt;
 
@@ -100,6 +109,7 @@ bool Magnify::update(Scene &scene, float dt) {
         }
     }
 
+    updateKeyFrame();
     generateModelMatrix();
     return true;
 }
@@ -108,8 +118,7 @@ void Magnify::render(Scene &scene) {
 
     if(!picked) {
         vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
-        vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2],
-                            1.0f);
+        vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
         vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
         float shininess = material.data()->shininess * 128;
 

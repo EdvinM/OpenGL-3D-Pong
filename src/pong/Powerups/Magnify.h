@@ -29,6 +29,8 @@ private:
 public:
     Magnify();
 
+    Magnify(glm::vec3 scale);
+
     /*!
    * Update asteroid
    * @param scene Scene to interact with

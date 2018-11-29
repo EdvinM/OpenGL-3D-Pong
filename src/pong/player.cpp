@@ -108,6 +108,7 @@ bool Player::update(Scene &scene, float dt) {
     }
   }
 
+    updateKeyFrame();
   generateModelMatrix();
   return true;
 }
