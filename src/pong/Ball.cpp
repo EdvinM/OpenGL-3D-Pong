@@ -76,27 +76,6 @@ bool Ball::update(Scene &scene, float dt) {
           if (position.z >= 20.0f)
               return false;
       } else {
-          float x_deviation_value = 0;
-
-          //Check for collision with screen boundaries
-//          if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
-//              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
-//
-//              if (speed.y < 0)
-//                  x_deviation_value *= -1;
-//
-//              speed.y *= (-1);
-//              position.y += x_deviation_value;
-//          }
-//
-//          if (position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
-//              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
-//
-//              if (speed.y < 0)
-//                  x_deviation_value *= -1;
-//
-//              position.y += x_deviation_value;
-//          }
 
           // Collide with scene
           for (auto &obj : scene.objects) {
