@@ -21,6 +21,8 @@
 #include "Floor.h"
 #include "life.h"
 #include "PowerupManager.h"
+#include "IntroScene.h"
+#include "TextBackground.h"
 
 using namespace std;
 using namespace glm;
@@ -38,7 +40,40 @@ private:
    * Reset and initialize the game scene
    * Creating unique smart pointers to objects that are stored in the scene object list
    */
-  void initScene() {
+
+  void initWelcomeScreen() {
+      scene.objects.clear();
+
+      animate = !animate;
+
+      auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
+      camera->position.z = -17.82f;
+      camera->position.y = -0.060f;
+      camera->position.x = 77.220f;
+
+      camera->back.y = -2.71988f;
+      camera->back.z = -37.0402f;
+
+      camera->up.y = 1.0f;
+      scene.camera = move(camera);
+
+      scene.objects.push_back(make_unique<TextBackground>());
+
+      auto floor = make_unique<Floor>();
+      floor->position.z = 2.0f;
+      floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
+      floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
+      scene.objects.push_back(move(floor));
+
+      auto introScene = make_unique<IntroScene>();
+      introScene->position.x = 76.99f;
+      introScene->position.y = 1.29f;
+      introScene->position.z = -5.0f;
+
+      scene.objects.push_back(move(introScene));
+  }
+
+  void initGameScene() {
     scene.objects.clear();
 
     // Create a camera
@@ -113,7 +148,7 @@ public:
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
-    initScene();
+    initGameScene();
   }
 
   /*!
@@ -136,7 +171,8 @@ public:
     }
 
     if(key == GLFW_KEY_I && action == GLFW_PRESS) {
-      initScene();
+      animate = !animate;
+      initGameScene();
     }
 
     // Pause

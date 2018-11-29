@@ -112,6 +112,22 @@ bool Floor::update(Scene &scene, float dt) {
         scene.lightDirection.z += 0.05;
     }
 
+    else if(scene.keyboard[GLFW_KEY_F]) {
+
+        cout << "Pos X = " << scene.camera->position.x << endl;
+        cout << "Pos Y = " << scene.camera->position.y << endl;
+        cout << "Pos Z = " << scene.camera->position.z << endl;
+
+        cout << "Back X = " << scene.camera->back.x << endl;
+        cout << "Back Y = " << scene.camera->back.y << endl;
+        cout << "Back Z = " << scene.camera->back.z << endl;
+
+        cout << "Up X = " << scene.camera->up.x << endl;
+        cout << "Up Y = " << scene.camera->up.y << endl;
+        cout << "Up Z = " << scene.camera->up.z << endl;
+
+    }
+
     generateModelMatrix();
     return true;
 }
