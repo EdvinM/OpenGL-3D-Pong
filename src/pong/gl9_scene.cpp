@@ -22,9 +22,6 @@
 #include "life.h"
 #include "PowerupManager.h"
 #include "StaticScenes/IntroScene.h"
-#include "StaticScenes/TextBackground.h"
-#include "StaticScenes/LeftWinnerScene.h"
-#include "StaticScenes/RightWinnerScene.h"
 
 using namespace std;
 using namespace glm;
@@ -46,7 +43,7 @@ private:
   void initWelcomeScreen() {
       scene.objects.clear();
 
-      animate = !animate;
+      animate = true;
 
       auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
       camera->position.z = -17.82f;
@@ -61,12 +58,6 @@ private:
 
       scene.objects.push_back(make_unique<TextBackground>());
 
-      auto floor = make_unique<Floor>();
-      floor->position.z = 2.0f;
-      floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
-      floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
-      scene.objects.push_back(move(floor));
-
       auto introScene = make_unique<IntroScene>();
       introScene->position.x = 76.99f;
       introScene->position.y = 1.29f;
@@ -75,51 +66,10 @@ private:
       scene.objects.push_back(move(introScene));
   }
 
-  void initEndGameScene(int side) {
-      scene.objects.clear();
-
-      animate = false;
-
-      auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
-      camera->position.z = -17.82f;
-      camera->position.y = -0.060f;
-      camera->position.x = -77.220f;
-
-      camera->back.y = -2.71988f;
-      camera->back.z = -37.0402f;
-
-      camera->up.y = 1.0f;
-      scene.camera = move(camera);
-
-      scene.objects.push_back(make_unique<TextBackground>());
-
-      auto floor = make_unique<Floor>();
-      floor->position.z = 2.0f;
-      floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
-      floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
-      scene.objects.push_back(move(floor));
-
-      if(side != -1) {
-          auto winnerScene = make_unique<RightWinnerScene>();
-          winnerScene->position.x = -76.99f;
-          winnerScene->position.y = 1.29f;
-          winnerScene->position.z = -5.0f;
-
-          scene.objects.push_back(move(winnerScene));
-      }
-      else {
-          auto winnerScene = make_unique<LeftWinnerScene>();
-          winnerScene->position.x = -76.99f;
-          winnerScene->position.y = 1.29f;
-          winnerScene->position.z = -5.0f;
-
-          scene.objects.push_back(move(winnerScene));
-      }
-
-  }
-
   void initGameScene() {
     scene.objects.clear();
+
+    animate = true;
 
     // Create a camera
     auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
@@ -193,7 +143,7 @@ public:
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
-      initEndGameScene(1);
+      initWelcomeScreen();
   }
 
   /*!
@@ -216,7 +166,6 @@ public:
     }
 
     if(key == GLFW_KEY_I && action == GLFW_PRESS) {
-      animate = !animate;
       initGameScene();
     }
 

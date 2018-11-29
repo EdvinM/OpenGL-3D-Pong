@@ -20,9 +20,6 @@ TextBackground::TextBackground() {
 }
 
 bool TextBackground::update(Scene &scene, float dt) {
-    // Offset for UV mapping, creates illusion of scrolling
-    textureOffset.y -= dt/5;
-
     generateModelMatrix();
     return true;
 }

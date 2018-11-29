@@ -7,6 +7,9 @@
 #include "scene.h"
 #include "object.h"
 #include "life.h"
+#include "StaticScenes/TextBackground.h"
+#include "StaticScenes/RightWinnerScene.h"
+#include "StaticScenes/LeftWinnerScene.h"
 
 /*!
  * Simple object representing the player
@@ -67,6 +70,6 @@ public:
    * Player click event
    * @param scene
    */
-  void onClick(Scene &scene) override ;
+  void initEndGameScene(Scene &scene, int side);
 };
 

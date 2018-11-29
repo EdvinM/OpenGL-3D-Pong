@@ -59,6 +59,11 @@ bool Player::update(Scene &scene, float dt) {
         obj->update(scene, dt);
     }
 
+    if(this->lifes.size() == 0) {
+        this->initEndGameScene(scene, this->pos);
+        return false;
+    }
+
   // Keyboard controls
   if(scene.keyboard[this->control_up] && this->can_move_up) {
       this->acceleration += dt * 1.25f;
@@ -139,6 +144,33 @@ void Player::render(Scene &scene) {
     mesh->render();
 }
 
-void Player::onClick(Scene &scene) {
-  cout << "Player has been clicked!" << endl;
+void Player::initEndGameScene(Scene &scene, int side) {
+    scene.camera->position.z = -17.82f;
+    scene.camera->position.y = -0.060f;
+    scene.camera->position.x = -77.220f;
+
+    scene.camera->back.y = -2.71988f;
+    scene.camera->back.z = -37.0402f;
+
+    scene.camera->up.y = 1.0f;
+
+    scene.objects.push_back(make_unique<TextBackground>());
+
+    if(side != -1) {
+        auto winnerScene = make_unique<RightWinnerScene>();
+        winnerScene->position.x = -76.99f;
+        winnerScene->position.y = 1.29f;
+        winnerScene->position.z = -5.0f;
+
+        scene.objects.push_back(move(winnerScene));
+    }
+    else {
+        auto winnerScene = make_unique<LeftWinnerScene>();
+        winnerScene->position.x = -76.99f;
+        winnerScene->position.y = 1.29f;
+        winnerScene->position.z = -5.0f;
+
+        scene.objects.push_back(move(winnerScene));
+    }
+
 }
