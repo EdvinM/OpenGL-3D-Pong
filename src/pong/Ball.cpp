@@ -32,6 +32,7 @@ Ball::Ball() {
 
   this->lastHitByPlayerId = 0;
   this->offTheField = false;
+  this->spawned = false;
 
   rotation = {0.0f, 2.0f, 0.0f};
   rotMomentum = {0.0f, linearRand(1.0f, 3.0f), 0.0f};
@@ -56,78 +57,91 @@ bool Ball::update(Scene &scene, float dt) {
   // Rotate the object
   rotation += rotMomentum * dt;
 
-  if(this->offTheField) {
-    position.z += 0.035f;
-    scale -= dt;
+  if(!this->spawned) {
+    generateModelMatrix();
 
-    if(position.z >= 20.0f)
-      return false;
+    this->spawn(position);
+    this->spawned = true;
+    return true;
   }
   else {
-    float x_deviation_value = 0;
-
-    //Check for collision with screen boundaries
-    if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
-      x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
-
-      if(speed.y < 0)
-        x_deviation_value *= -1;
-
-      speed.y *= (-1);
-      position.y += x_deviation_value;
-    }
-
-    if(position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
-      x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
-
-      if(speed.y < 0)
-        x_deviation_value *= -1;
-
-      speed.y *= (-1);
-      position.y += x_deviation_value;
-    }
-
-    // Collide with scene
-    for (auto &obj : scene.objects) {
-      // Ignore self in scene
-      if (obj.get() == this) continue;
-
-      // We only need to collide with asteroids and projectiles, ignore other objects
-      auto player = dynamic_cast<Player *>(obj.get());
-      if (!player) continue;
-
-      if ((position.x >= ((Scene::WIDTH / 100.0) + scale.x) && player->pos == 1) ||
-          (position.x <= -((Scene::WIDTH / 100.0) + scale.x) && player->pos == -1)) {
-        if (player->lifes.size() > 0) {
-
-          player->lifes.pop_back();
-
-          //Destroy the ball
-          this->offTheField = true;
-        }
+      if (this->spawned && this->position.z >= 1.0f) {
+          this->empltyKeyFrames();
       }
 
-      if (distance(position, player->position) <= player->scale.y) {
+      if (this->offTheField) {
+          position.z += 0.035f;
+          scale -= dt;
 
-        if (!player->mutex) {
-          float dx = (player->position.x * player->scale.x) - (position.x * scale.x);
-          float dy = (player->position.y * player->scale.y) - (position.y * scale.y);
-
-          float angle = atan2(dy, dx);
-
-          speed.x *= -1;
-          speed.y = (15.0f * -sin(angle)) * (player->acceleration * 1.5f);
-
-          player->mutex = true;
-          this->lastHitByPlayerId = player->pos;
-        }
+          if (position.z >= 20.0f)
+              return false;
       } else {
-        player->mutex = false;
+          float x_deviation_value = 0;
+
+          //Check for collision with screen boundaries
+          if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
+              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
+
+              if (speed.y < 0)
+                  x_deviation_value *= -1;
+
+              speed.y *= (-1);
+              position.y += x_deviation_value;
+          }
+
+          if (position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
+              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
+
+              if (speed.y < 0)
+                  x_deviation_value *= -1;
+
+              speed.y *= (-1);
+              position.y += x_deviation_value;
+          }
+
+          // Collide with scene
+          for (auto &obj : scene.objects) {
+              // Ignore self in scene
+              if (obj.get() == this) continue;
+
+              // We only need to collide with asteroids and projectiles, ignore other objects
+              auto player = dynamic_cast<Player *>(obj.get());
+              if (!player) continue;
+
+              if ((position.x >= ((Scene::WIDTH / 100.0) + scale.x) && player->pos == 1) ||
+                  (position.x <= -((Scene::WIDTH / 100.0) + scale.x) && player->pos == -1)) {
+                  if (player->lifes.size() > 0) {
+
+                      player->lifes.pop_back();
+
+                      //Destroy the ball
+                      this->offTheField = true;
+                  }
+              }
+
+              if (distance(position, player->position) <= player->scale.y) {
+
+                  if (!player->mutex) {
+                      float dx = (player->position.x * player->scale.x) - (position.x * scale.x);
+                      float dy = (player->position.y * player->scale.y) - (position.y * scale.y);
+
+                      float angle = atan2(dy, dx);
+
+                      speed.x *= -1;
+                      speed.y = (15.0f * -sin(angle)) * (player->acceleration * 1.5f);
+
+                      player->mutex = true;
+                      this->lastHitByPlayerId = player->pos;
+                  }
+              } else {
+                  player->mutex = false;
+              }
+          }
       }
-    }
   }
 
   // Generate modelMatrix from position, rotation and scale
+  updateKeyFrame();
   generateModelMatrix();
 
   return true;
@@ -159,8 +173,14 @@ void Ball::render(Scene &scene) {
   mesh->render();
 }
 
-void Ball::onClick(Scene &scene) {
-  cout << "Asteroid clicked!" << endl;
-  age = 10000;
+void Ball::spawn(vec3 position) {
+    float start_Z = position.z;
+
+  addKeyFrame(100, this->rotation, this->scale, {position.x, position.y, start_Z});
+  addKeyFrame(100, this->rotation, this->scale, {position.x, position.y, 0.9f});
+  addKeyFrame(110, this->rotation, this->scale, {position.x, position.y, start_Z / 2.0f});
+  addKeyFrame(50, this->rotation, this->scale, {position.x, position.y, 0.9f});
+  addKeyFrame(50, this->rotation, this->scale, {position.x, position.y, start_Z / 3.0f});
+  addKeyFrame(50, this->rotation, this->scale, {position.x, position.y, 1.0f});
 }
 

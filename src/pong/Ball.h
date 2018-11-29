@@ -52,13 +52,14 @@ public:
   /*!
    * Custom click event for asteroid
    */
-  void onClick(Scene &scene) override;
+  void spawn(glm::vec3 position);
 
     glm::vec3 speed;
 
     int lastHitByPlayerId;
 
     bool offTheField;
+    bool spawned;
 
 private:
 };

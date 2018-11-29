@@ -159,7 +159,7 @@ public:
     // Reset
     if (key == GLFW_KEY_R && action == GLFW_PRESS) {
         auto ball = make_unique<Ball>();
-        ball->position.z = 1.0f;
+        ball->position.z = -5.0f;
         ball->scale = {1.5f, 1.5f, 1.2f};
 
         scene.objects.push_back(move(ball));

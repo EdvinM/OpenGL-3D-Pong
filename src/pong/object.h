@@ -77,6 +77,7 @@ protected:
   void generateModelMatrix();
 
   void updateKeyFrame();
+  void empltyKeyFrames();
 
   glm::vec3 linearInterpolation(glm::vec3 a, glm::vec3 b, float t);
 };

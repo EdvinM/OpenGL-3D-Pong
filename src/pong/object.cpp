@@ -51,3 +51,10 @@ void Object::addKeyFrame(int duration, glm::vec3 keyFrameRotation, glm::vec3 key
 
   this->keyframeAnimation.push_back(newKeyframe);
 }
+
+void Object::empltyKeyFrames() {
+  if(this->keyframeAnimation.size() <= 0)
+    return;
+
+  this->keyframeAnimation.clear();
+}
