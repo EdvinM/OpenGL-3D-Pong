@@ -53,6 +53,8 @@ class Scene {
     // Lights, in this case using only simple directional diffuse lighting
     glm::vec3 lightDirection{-1.0f, -1.0f, -1.0f};
     glm::vec3 lightColor = glm::vec3(1,1,1);
+    glm::vec3 lightDirection2 = {1.0f, -1.0f, -1.0f};
+    glm::vec3 lightColor2 = glm::vec3(1,1,1);
     glm::vec3 ambientLightColor = glm::vec3(0.2, 0.2, 0.2);
 
     // Store cursor state

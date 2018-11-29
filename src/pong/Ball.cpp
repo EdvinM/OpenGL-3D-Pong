@@ -143,6 +143,7 @@ void Ball::render(Scene &scene) {
   shader->use();
   shader->setUniform("LightDirection", scene.lightDirection);
   shader->setUniform("LightColor", scene.lightColor);
+
   shader->setUniform("AmbientLightColor", scene.ambientLightColor);
   shader->setUniform("CameraPosition", scene.camera->position);
   shader->setUniform("ModelMatrix", modelMatrix);

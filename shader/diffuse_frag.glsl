@@ -5,6 +5,8 @@ uniform sampler2D Texture;
 // Direction of light
 uniform vec3 LightDirection;
 uniform vec3 LightColor;
+uniform vec3 LightDirection2;
+uniform vec3 LightColor2;
 uniform vec3 AmbientLightColor;
 
 //Material Properties
@@ -47,8 +49,29 @@ void main() {
   //Finalize the light's color contribution
   vec4 LightFragmentColor = ObjectTextureColor * vec4(LightDiffuseFactor) * vec4(LightColor.rgb,1.0) * MaterialDiffuse;
 
-  //combine all the light colors with the scene's ambient color
+//combine all the light colors with the scene's ambient color
   FragmentColor = vec4(AmbientLightColor * MaterialAmbient,1.0) + vec4(SpecularColor,1.0) + (LightFragmentColor);
+
+
+  // Lookup the color in Texture on coordinates given by texCoord. NOTE: Texture coordinate is inverted vertically for compatibility with OBJ
+  ObjectTextureColor = texture(Texture, vec2(texCoord.x, 1.0 - texCoord.y) + TextureOffset);
+
+  //Calculate the lambert lighting factor based on the object normal
+  LightDiffuseFactor = max(dot(normal, vec4(normalize(LightDirection2), 1.0f)), 0.0f);
+
+  //Calculate the specular color
+  ViewDirection = normalize(CameraPosition - worldPosition);
+  ReflectionDirection = reflect(-LightDirection2, normal.xyz);
+  SpecularFactor = pow(max(dot(ViewDirection, ReflectionDirection), 0.0), MaterialShininess);
+  specularStrength = 0.1;
+  SpecularColor = vec3(specularStrength) * vec3(SpecularFactor) * LightColor2 * MaterialSpecular;
+
+  //Finalize the light's color contribution
+  LightFragmentColor = ObjectTextureColor * vec4(LightDiffuseFactor) * vec4(LightColor2.rgb,1.0) * MaterialDiffuse;
+
+//combine all the light colors with the scene's ambient color
+  FragmentColor +=  vec4(SpecularColor,1.0) + (LightFragmentColor);
   //FragmentColor = vec4(AmbientLightColor,1.0) + (LightFragmentColor);
   FragmentColor.a = Transparency;
+
 }
