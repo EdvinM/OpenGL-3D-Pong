@@ -7,7 +7,7 @@
 
 #include <ppgso/ppgso.h>
 
-#include "object.h"
+#include "src/pong/object.h"
 
 class TextBackground final : public Object {
 private:

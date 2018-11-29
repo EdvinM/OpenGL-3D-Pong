@@ -2,7 +2,7 @@
 // Created by Edvin Mako on 2018-11-29.
 //
 
-#include "scene.h"
+#include "src/pong/scene.h"
 #include "TextBackground.h"
 
 #include <shaders/texture_vert_glsl.h>
@@ -15,7 +15,7 @@ using namespace ppgso;
 TextBackground::TextBackground() {
     // Initialize static resources if needed
     if (!shader) shader = make_unique<Shader>(texture_vert_glsl, texture_frag_glsl);
-    if (!texture) texture = make_unique<Texture>(image::loadBMP("stars.bmp"));
+    if (!texture) texture = make_unique<Texture>(image::loadBMP("static_screen_background.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("quad.obj");
 }
 

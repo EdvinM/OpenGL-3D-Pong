@@ -2,12 +2,8 @@
 // Created by Edvin Mako on 2018-11-29.
 //
 
-//
-
-// Created by Edvin Mako on 27/11/2018.
-//
 #include <glm/gtc/random.hpp>
-#include "IntroScene.h"
+#include "RightWinnerScene.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -17,23 +13,23 @@ using namespace glm;
 using namespace ppgso;
 
 // Static resources
-unique_ptr<Mesh> IntroScene::mesh;
-unique_ptr<Shader> IntroScene::shader;
+unique_ptr<Mesh> RightWinnerScene::mesh;
+unique_ptr<Shader> RightWinnerScene::shader;
 
-map<std::string, int> IntroScene::material_map;
-vector<tinyobj::material_t> IntroScene::material;
+map<std::string, int> RightWinnerScene::material_map;
+vector<tinyobj::material_t> RightWinnerScene::material;
 
-IntroScene::IntroScene() {
-    // Initialize static resources if needed
-    if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-    if (!mesh) mesh = make_unique<Mesh>("welcome_screen.obj");
-
-    //Load mtl files
-    ifstream mtl("welcome_screen.mtl", std::ifstream::binary);
-    tinyobj::LoadMtl(this->material_map, this->material, mtl);
+RightWinnerScene::RightWinnerScene() {
+//    // Initialize static resources if needed
+//    if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+//    if (!mesh) mesh = make_unique<Mesh>("right_player.obj");
+//
+//    //Load mtl files
+//    ifstream mtl("right_player.mtl", std::ifstream::binary);
+//    tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
-bool IntroScene::update(Scene &scene, float dt) {
+bool RightWinnerScene::update(Scene &scene, float dt) {
 
     rotation.x = PI / 2;
 
@@ -41,7 +37,7 @@ bool IntroScene::update(Scene &scene, float dt) {
     return true;
 }
 
-void IntroScene::render(Scene &scene) {
+void RightWinnerScene::render(Scene &scene) {
     vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
     vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
     vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);

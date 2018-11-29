@@ -122,7 +122,7 @@ target_link_libraries(raw4_raster ppgso)
 install(TARGETS raw4_raster DESTINATION .)
 
 # gl1_gradient
-add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp)
+add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp src/pong/StaticScenes/RightWinnerScene.cpp src/pong/StaticScenes/RightWinnerScene.h src/pong/StaticScenes/LeftWinnerScene.cpp src/pong/StaticScenes/LeftWinnerScene.h)
 target_link_libraries(gl1_gradient ppgso shaders)
 install(TARGETS gl1_gradient DESTINATION .)
 
@@ -184,7 +184,31 @@ add_executable(pong
         src/pong/camera.cpp
         src/pong/Ball.cpp
         src/pong/player.cpp
-        src/pong/space.cpp src/pong/border.cpp src/pong/border.h src/pong/Floor.cpp src/pong/Floor.h src/pong/life.cpp src/pong/life.h src/pong/Powerups/QuakePU.cpp src/pong/Powerups/QuakePU.h src/pong/Powerups/Splitter.cpp src/pong/Powerups/Splitter.h src/pong/Powerups/Magnify.cpp src/pong/Powerups/Magnify.h src/pong/PowerupManager.cpp src/pong/PowerupManager.h src/pong/Powerups/RotatingBall.cpp src/pong/Powerups/RotatingBall.h src/pong/IntroScene.cpp src/pong/IntroScene.h src/pong/TextBackground.cpp src/pong/TextBackground.h)
+        src/pong/space.cpp
+        src/pong/border.cpp
+        src/pong/border.h
+        src/pong/Floor.cpp
+        src/pong/Floor.h
+        src/pong/life.cpp
+        src/pong/life.h
+        src/pong/Powerups/QuakePU.cpp
+        src/pong/Powerups/QuakePU.h
+        src/pong/Powerups/Splitter.cpp
+        src/pong/Powerups/Splitter.h
+        src/pong/Powerups/Magnify.cpp
+        src/pong/Powerups/Magnify.h
+        src/pong/PowerupManager.cpp
+        src/pong/PowerupManager.h
+        src/pong/Powerups/RotatingBall.cpp
+        src/pong/Powerups/RotatingBall.h
+        src/pong/StaticScenes/IntroScene.cpp
+        src/pong/StaticScenes/IntroScene.h
+        src/pong/StaticScenes/RightWinnerScene.cpp
+        src/pong/StaticScenes/RightWinnerScene.h
+        src/pong/StaticScenes/LeftWinnerScene.cpp
+        src/pong/StaticScenes/LeftWinnerScene.h
+        src/pong/StaticScenes/TextBackground.cpp
+        src/pong/StaticScenes/TextBackground.h)
 target_link_libraries(pong ppgso shaders)
 install(TARGETS pong DESTINATION .)
 

@@ -21,8 +21,10 @@
 #include "Floor.h"
 #include "life.h"
 #include "PowerupManager.h"
-#include "IntroScene.h"
-#include "TextBackground.h"
+#include "StaticScenes/IntroScene.h"
+#include "StaticScenes/TextBackground.h"
+#include "StaticScenes/LeftWinnerScene.h"
+#include "StaticScenes/RightWinnerScene.h"
 
 using namespace std;
 using namespace glm;
@@ -71,6 +73,42 @@ private:
       introScene->position.z = -5.0f;
 
       scene.objects.push_back(move(introScene));
+  }
+
+  void initEndGameScene(int side) {
+      scene.objects.clear();
+
+      animate = false;
+
+      auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
+      camera->position.z = -17.82f;
+      camera->position.y = -0.060f;
+      camera->position.x = -77.220f;
+
+      camera->back.y = -2.71988f;
+      camera->back.z = -37.0402f;
+
+      camera->up.y = 1.0f;
+      scene.camera = move(camera);
+
+      scene.objects.push_back(make_unique<TextBackground>());
+
+      auto floor = make_unique<Floor>();
+      floor->position.z = 2.0f;
+      floor->scale.x = static_cast<float>(Scene::WIDTH / 100.0);
+      floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
+      scene.objects.push_back(move(floor));
+
+      auto winnerScene = make_unique<LeftWinnerScene>();
+
+      if(side != -1)
+          auto winnerScene = make_unique<RightWinnerScene>();
+
+      winnerScene->position.x = -76.99f;
+      winnerScene->position.y = 1.29f;
+      winnerScene->position.z = -5.0f;
+
+      scene.objects.push_back(move(winnerScene));
   }
 
   void initGameScene() {
@@ -148,7 +186,7 @@ public:
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
-    initGameScene();
+      initEndGameScene(1);
   }
 
   /*!

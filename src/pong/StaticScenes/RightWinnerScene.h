@@ -2,17 +2,17 @@
 // Created by Edvin Mako on 2018-11-29.
 //
 
-#ifndef PPGSO_INTROSCENE_H
-#define PPGSO_INTROSCENE_H
+#ifndef PPGSO_WINNERSCENE_H
+#define PPGSO_WINNERSCENE_H
 
 #include <memory>
 
 #include <ppgso/ppgso.h>
 
-#include "scene.h"
-#include "object.h"
+#include "src/pong/scene.h"
+#include "src/pong/object.h"
 
-class IntroScene : public Object {
+class RightWinnerScene : public Object {
     private:
         // Static resources (Shared between instances)
         static std::unique_ptr<ppgso::Mesh> mesh;
@@ -23,7 +23,7 @@ class IntroScene : public Object {
         static std::map<std::string, int> material_map;
 
     public:
-        IntroScene();
+        RightWinnerScene();
 
         /*!
        * Update asteroid
@@ -41,4 +41,4 @@ class IntroScene : public Object {
 };
 
 
-#endif //PPGSO_INTROSCENE_H
+#endif //PPGSO_WINNERSCENE_H
