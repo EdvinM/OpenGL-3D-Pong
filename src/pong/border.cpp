@@ -51,6 +51,8 @@ void border::render(Scene &scene) {
     shader->use();
     shader->setUniform("LightDirection", scene.lightDirection);
     shader->setUniform("LightColor", scene.lightColor);
+    shader->setUniform("LightDirection2", scene.lightDirection2);
+    shader->setUniform("LightColor2", scene.lightColor2);
     shader->setUniform("AmbientLightColor", scene.ambientLightColor);
     shader->setUniform("CameraPosition", scene.camera->position);
     shader->setUniform("ModelMatrix", modelMatrix);

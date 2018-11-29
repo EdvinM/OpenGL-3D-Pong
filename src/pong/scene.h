@@ -51,10 +51,12 @@ class Scene {
     std::map< int, int > keyboard;
 
     // Lights, in this case using only simple directional diffuse lighting
-    glm::vec3 lightDirection{-1.0f, -1.0f, -1.0f};
-    glm::vec3 lightColor = glm::vec3(1,1,1);
-    glm::vec3 lightDirection2 = {1.0f, -1.0f, -1.0f};
-    glm::vec3 lightColor2 = glm::vec3(1,1,1);
+    glm::vec3 lightDirection{-0.65f, 0.55f, -0.65f};
+    glm::vec3 lightColor = glm::vec3(1, 1, 1);
+
+    glm::vec3 lightDirection2 = {1.2f, -0.85f, -0.25f};
+    //glm::vec3 lightDirection2 = {0.85f, -0.85f, -0.25f};
+    glm::vec3 lightColor2 = glm::vec3(1, 0.9, 0.3);
     glm::vec3 ambientLightColor = glm::vec3(0.2, 0.2, 0.2);
 
     // Store cursor state

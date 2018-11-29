@@ -71,14 +71,6 @@ bool Floor::update(Scene &scene, float dt) {
     else if (scene.keyboard[GLFW_KEY_4]){
         scene.camera->back.z += 0.01f;
     }
-    else if (scene.keyboard[GLFW_KEY_J]){
-        scene.camera->up = {0,1,0};
-        scene.camera->position = {0,0,0};
-        scene.camera->back = {0,0,-1};
-        scene.camera->position.z = -20.0f;
-        scene.camera->position.y = -15.0f;
-        scene.camera->back.y = -0.8f;
-    }
 
     else if(scene.keyboard[GLFW_KEY_C] && scene.keyboard[GLFW_KEY_L]){
         scene.camera->up = this->cameraPositions[0].up;
@@ -111,6 +103,36 @@ bool Floor::update(Scene &scene, float dt) {
     else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_X]) {
         scene.lightDirection.z += 0.05;
     }
+    else if(scene.keyboard[GLFW_KEY_L] && scene.keyboard[GLFW_KEY_P]) {
+        cout << "X= " << scene.lightDirection.x << endl;
+        cout << "Y= " << scene.lightDirection.y << endl;
+        cout << "Z= " << scene.lightDirection.z << endl;
+    }
+
+        //Light Movement
+    else if(scene.keyboard[GLFW_KEY_J] && scene.keyboard[GLFW_KEY_LEFT]) {
+        scene.lightDirection2.x -= 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_J] && scene.keyboard[GLFW_KEY_RIGHT]) {
+        scene.lightDirection2.x += 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_J] && scene.keyboard[GLFW_KEY_UP]) {
+        scene.lightDirection2.y += 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_J] && scene.keyboard[GLFW_KEY_DOWN]) {
+        scene.lightDirection2.y -= 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_J] && scene.keyboard[GLFW_KEY_Z]) {
+        scene.lightDirection2.z -= 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_J] && scene.keyboard[GLFW_KEY_X]) {
+        scene.lightDirection2.z += 0.05;
+    }
+    else if(scene.keyboard[GLFW_KEY_J] && scene.keyboard[GLFW_KEY_P]) {
+        cout << "X= " << scene.lightDirection2.x << endl;
+        cout << "Y= " << scene.lightDirection2.y << endl;
+        cout << "Z= " << scene.lightDirection2.z << endl;
+    }
 
     generateModelMatrix();
     return true;
@@ -126,6 +148,8 @@ void Floor::render(Scene &scene) {
     shader->use();
     shader->setUniform("LightDirection", scene.lightDirection);
     shader->setUniform("LightColor", scene.lightColor);
+    shader->setUniform("LightDirection2", scene.lightDirection2);
+    shader->setUniform("LightColor2", scene.lightColor2);
     shader->setUniform("AmbientLightColor", scene.ambientLightColor);
     shader->setUniform("CameraPosition", scene.camera->position);
     shader->setUniform("ModelMatrix", modelMatrix);

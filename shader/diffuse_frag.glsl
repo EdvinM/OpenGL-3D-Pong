@@ -43,7 +43,7 @@ void main() {
   vec3 ViewDirection = normalize(CameraPosition - worldPosition);
   vec3 ReflectionDirection = reflect(-LightDirection, normal.xyz);
   float SpecularFactor = pow(max(dot(ViewDirection, ReflectionDirection), 0.0), MaterialShininess);
-  float specularStrength = 0.1;
+  float specularStrength = 0.01f;
   vec3 SpecularColor = vec3(specularStrength) * vec3(SpecularFactor) * LightColor * MaterialSpecular;
 
   //Finalize the light's color contribution
@@ -63,7 +63,7 @@ void main() {
   ViewDirection = normalize(CameraPosition - worldPosition);
   ReflectionDirection = reflect(-LightDirection2, normal.xyz);
   SpecularFactor = pow(max(dot(ViewDirection, ReflectionDirection), 0.0), MaterialShininess);
-  specularStrength = 0.1;
+  specularStrength = 0.01f;
   SpecularColor = vec3(specularStrength) * vec3(SpecularFactor) * LightColor2 * MaterialSpecular;
 
   //Finalize the light's color contribution
