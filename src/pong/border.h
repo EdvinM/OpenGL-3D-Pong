@@ -30,6 +30,7 @@ class border final : public Object {
     public:
 
         int border_position;
+        bool mutex;
 
         border();
         border(int border_position);

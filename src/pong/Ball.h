@@ -5,6 +5,7 @@
 
 #include "scene.h"
 #include "object.h"
+#include "border.h"
 
 /*!
  * Simple asteroid object

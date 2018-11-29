@@ -27,6 +27,8 @@ border::border() {
     //Load mtl files
     ifstream mtl("uvmappedcube.mtl", std::ifstream::binary);
     tinyobj::LoadMtl(this->material_map, this->material, mtl);
+
+    this->mutex = false;
 }
 
 border::border(int border_position) : border() {

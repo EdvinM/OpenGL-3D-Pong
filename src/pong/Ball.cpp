@@ -79,25 +79,24 @@ bool Ball::update(Scene &scene, float dt) {
           float x_deviation_value = 0;
 
           //Check for collision with screen boundaries
-          if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
-              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
-
-              if (speed.y < 0)
-                  x_deviation_value *= -1;
-
-              speed.y *= (-1);
-              position.y += x_deviation_value;
-          }
-
-          if (position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
-              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
-
-              if (speed.y < 0)
-                  x_deviation_value *= -1;
-
-              speed.y *= (-1);
-              position.y += x_deviation_value;
-          }
+//          if (position.y <= -(Scene::WIDTH / 100.0) + 2.56f) {
+//              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f + position.y + 0.01);
+//
+//              if (speed.y < 0)
+//                  x_deviation_value *= -1;
+//
+//              speed.y *= (-1);
+//              position.y += x_deviation_value;
+//          }
+//
+//          if (position.y >= (Scene::WIDTH / 100.0) - 2.56f) {
+//              x_deviation_value = static_cast<float>((Scene::WIDTH / 100.0) - 2.56f - position.y + 0.01);
+//
+//              if (speed.y < 0)
+//                  x_deviation_value *= -1;
+//
+//              position.y += x_deviation_value;
+//          }
 
           // Collide with scene
           for (auto &obj : scene.objects) {
@@ -106,35 +105,49 @@ bool Ball::update(Scene &scene, float dt) {
 
               // We only need to collide with asteroids and projectiles, ignore other objects
               auto player = dynamic_cast<Player *>(obj.get());
-              if (!player) continue;
+              if (player) {
+                  if ((position.x >= ((Scene::WIDTH / 100.0) + scale.x) && player->pos == 1) ||
+                      (position.x <= -((Scene::WIDTH / 100.0) + scale.x) && player->pos == -1)) {
+                      if (player->lifes.size() > 0) {
 
-              if ((position.x >= ((Scene::WIDTH / 100.0) + scale.x) && player->pos == 1) ||
-                  (position.x <= -((Scene::WIDTH / 100.0) + scale.x) && player->pos == -1)) {
-                  if (player->lifes.size() > 0) {
+                          player->lifes.pop_back();
 
-                      player->lifes.pop_back();
+                          //Destroy the ball
+                          this->offTheField = true;
+                      }
+                  }
 
-                      //Destroy the ball
-                      this->offTheField = true;
+                  if (distance(position, player->position) <= player->scale.y) {
+                      if (!player->mutex) {
+                          float dx = (player->position.x * player->scale.x) - (position.x * scale.x);
+                          float dy = (player->position.y * player->scale.y) - (position.y * scale.y);
+
+                          float angle = atan2(dy, dx);
+
+                          speed.x *= -1;
+                          speed.y = (15.0f * -sin(angle)) * (player->acceleration * 1.5f);
+
+                          player->mutex = true;
+                          this->lastHitByPlayerId = player->pos;
+                      }
+                  } else {
+                      player->mutex = false;
                   }
               }
 
-              if (distance(position, player->position) <= player->scale.y) {
+              auto border_ = dynamic_cast<border*>(obj.get());
 
-                  if (!player->mutex) {
-                      float dx = (player->position.x * player->scale.x) - (position.x * scale.x);
-                      float dy = (player->position.y * player->scale.y) - (position.y * scale.y);
+              if(border_) {
+                  if (distance(position.y, border_->position.y) <= (scale.y + 0.2)) {
+                      if(!border_->mutex) {
+                          speed.y *= (-1);
 
-                      float angle = atan2(dy, dx);
-
-                      speed.x *= -1;
-                      speed.y = (15.0f * -sin(angle)) * (player->acceleration * 1.5f);
-
-                      player->mutex = true;
-                      this->lastHitByPlayerId = player->pos;
+                          border_->mutex = true;
+                      }
                   }
-              } else {
-                  player->mutex = false;
+                  else {
+                      border_->mutex = false;
+                  }
               }
           }
       }
