@@ -85,7 +85,7 @@ bool Player::update(Scene &scene, float dt) {
 
     if(!Border) continue;
 
-    if (distance(Border->position, position) <= 12.2) {
+    if (distance(Border->position.y, position.y) <= (scale.y + 0.5f)) {
         //Stop upper movement for our paddle if it reached border down
 
         if (Border->border_position == 2) {
