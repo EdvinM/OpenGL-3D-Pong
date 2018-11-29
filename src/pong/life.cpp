@@ -19,22 +19,11 @@ unique_ptr<Shader> Life::shader;
 map<std::string, int> Life::material_map;
 vector<tinyobj::material_t> Life::material;
 
-Keyframe setKeyframe(int duration, vec3 keyFrameRotation, vec3 keyFrameScale, vec3 keyFramePosition){
-    Keyframe newKeyframe;
-    newKeyframe.duration = duration;
-    newKeyframe.keyframeRotation = keyFrameRotation;
-    newKeyframe.keyframeScale = keyFrameScale;
-    newKeyframe.keyframePosition = keyFramePosition;
-
-    return newKeyframe;
-}
-
 Life::Life() {
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
     if (!texture) texture = make_unique<Texture>(image::loadBMP("heart_lp.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("heart_lp.obj");
 
-    this->useWithKeyframes = false;
     this->time = 0;
     this->duration = 0;
     this->active = true;
@@ -49,23 +38,15 @@ Life::Life(glm::vec3 rotation, glm::vec3 scale, glm::vec3 position) : Life() {
     this->scale = scale;
     this->position = position;
 
-    this->useWithKeyframes = true;
-
-    keyframeAnimation[0] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
-    keyframeAnimation[1] = setKeyframe(100, {0, 5, 0}, this->scale, this->position);
-    keyframeAnimation[2] = setKeyframe(100, {0, 2.5, 0}, this->scale, this->position);
-    keyframeAnimation[3] = setKeyframe(100, {0, 0, 0}, this->scale, this->position);
-}
-
-vec3 Life::linearInterpolation(vec3 a, vec3 b, float t){
-    vec3 result = (1 - t) * a + t * b;
-    return result;
+    addKeyFrame(100, {0, 2.5, 0}, this->scale, this->position);
+    addKeyFrame(100, {0, 5, 0}, this->scale, this->position);
+    addKeyFrame(100, {0, 2.5, 0}, this->scale, this->position);
+    addKeyFrame(100, {0, 0, 0}, this->scale, this->position);
 }
 
 bool Life::update(Scene &scene, float dt) {
 
     if(!this->active) {
-        explode(scene, 10);
         return false;
     }
 
@@ -74,56 +55,38 @@ bool Life::update(Scene &scene, float dt) {
     if(this->duration != 0 && this->time > this->duration)
         return false;
 
-    if(this->useWithKeyframes) {
-        Keyframe current = keyframeAnimation[processedKeyframes];
-        Keyframe next = keyframeAnimation[(processedKeyframes + 1) % keyframeCount];
+    for (auto &obj : scene.objects) {
+        if (obj.get() == this) continue;
 
-        float t = keyframeDuration / current.duration;
+        auto ball = dynamic_cast<Ball*>(obj.get());
 
-        position = linearInterpolation(current.keyframePosition, next.keyframePosition, t);
-        scale = linearInterpolation(current.keyframeScale, next.keyframeScale, t);
-        rotation = linearInterpolation(current.keyframeRotation, next.keyframeRotation, t);
+        if(!ball) continue;
 
-        keyframeDuration++;
-        if (keyframeDuration >= current.duration) {
-            keyframeDuration = 0;
-            processedKeyframes = (processedKeyframes + 1) % keyframeCount;
-        }
-    }
-    else {
+        if (distance(position, ball->position) <= (scale.x * 2)) {
 
-        for (auto &obj : scene.objects) {
-            if (obj.get() == this) continue;
+            for (auto &obj : scene.objects) {
+                if (obj.get() == this) continue;
 
-            auto ball = dynamic_cast<Ball*>(obj.get());
+                auto player = dynamic_cast<Player*>(obj.get());
 
-            if(!ball) continue;
+                if (!player) continue;
 
-            if (distance(position, ball->position) <= (scale.x * 2)) {
+                if(player->pos == ball->lastHitByPlayerId) {
 
-                for (auto &obj : scene.objects) {
-                    if (obj.get() == this) continue;
+                    auto life = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5}), vec3({((Scene::WIDTH) / 100.0f + 1.3f) * player->pos, (player->lifes[player->lifes.size() - 1]->position.y) - 2.5f, 0}));
+                    player->lifes.push_back(move(life));
 
-                    auto player = dynamic_cast<Player*>(obj.get());
-
-                    if (!player) continue;
-
-                    if(player->pos == ball->lastHitByPlayerId) {
-
-                        auto life = make_unique<Life>(vec3({0, 0, 0}), vec3({0.5f,0.5f,0.5}), vec3({((Scene::WIDTH) / 100.0f + 1.3f) * player->pos, (player->lifes[player->lifes.size() - 1]->position.y) - 2.5f, 0}));
-                        player->lifes.push_back(move(life));
-
-                        //Destroy the heart
-                        this->time += this->duration * 2;
-                        break;
-                    }
+                    //Destroy the heart
+                    this->time += this->duration * 2;
+                    break;
                 }
             }
-
-            break;
         }
+
+        break;
     }
 
+    updateKeyFrame();
     generateModelMatrix();
     return true;
 }
@@ -151,9 +114,4 @@ void Life::render(Scene &scene) {
 
     shader->setUniform("Texture", *texture);
     mesh->render();
-}
-
-void Life::explode(Scene &scene, int pieces) {
-    // Generate smaller asteroids
-
 }

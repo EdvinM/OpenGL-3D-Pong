@@ -13,13 +13,6 @@
 #include "object.h"
 #include "Ball.h"
 
-struct Keyframe {
-    glm::vec3 keyframePosition = {0, 0, 0};
-    glm::vec3 keyframeRotation = {0, 0, 0};
-    glm::vec3 keyframeScale = {1, 1, 1};
-    float duration = 100;
-};
-
 class Life final : public Object {
 
 
@@ -34,12 +27,6 @@ class Life final : public Object {
         static std::map<std::string, int> material_map;
 
         float time;
-
-            Keyframe keyframeAnimation[5];
-            int keyframeCount = 4;
-            float keyframeDuration = 0;
-            int processedKeyframes = 0;
-            bool useWithKeyframes;
 
     public:
         Life();
@@ -59,10 +46,6 @@ class Life final : public Object {
        * @param scene Scene to render in
        */
         void render(Scene &scene) override;
-
-        void explode(Scene &scene, int pieces);
-        
-        glm::vec3 linearInterpolation(glm::vec3 a, glm::vec3 b, float t);
 
         bool active;
 
