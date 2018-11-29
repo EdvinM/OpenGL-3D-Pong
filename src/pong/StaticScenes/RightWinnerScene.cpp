@@ -20,13 +20,13 @@ map<std::string, int> RightWinnerScene::material_map;
 vector<tinyobj::material_t> RightWinnerScene::material;
 
 RightWinnerScene::RightWinnerScene() {
-//    // Initialize static resources if needed
-//    if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-//    if (!mesh) mesh = make_unique<Mesh>("right_player.obj");
-//
-//    //Load mtl files
-//    ifstream mtl("right_player.mtl", std::ifstream::binary);
-//    tinyobj::LoadMtl(this->material_map, this->material, mtl);
+    // Initialize static resources if needed
+    if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+    if (!mesh) mesh = make_unique<Mesh>("right_player.obj");
+
+    //Load mtl files
+    ifstream mtl("right_player.mtl", std::ifstream::binary);
+    tinyobj::LoadMtl(this->material_map, this->material, mtl);
 }
 
 bool RightWinnerScene::update(Scene &scene, float dt) {

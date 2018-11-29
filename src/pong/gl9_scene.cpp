@@ -99,16 +99,23 @@ private:
       floor->scale.y = static_cast<float>(Scene::WIDTH / 100.0);
       scene.objects.push_back(move(floor));
 
-      auto winnerScene = make_unique<LeftWinnerScene>();
-
-      if(side != -1)
+      if(side != -1) {
           auto winnerScene = make_unique<RightWinnerScene>();
+          winnerScene->position.x = -76.99f;
+          winnerScene->position.y = 1.29f;
+          winnerScene->position.z = -5.0f;
 
-      winnerScene->position.x = -76.99f;
-      winnerScene->position.y = 1.29f;
-      winnerScene->position.z = -5.0f;
+          scene.objects.push_back(move(winnerScene));
+      }
+      else {
+          auto winnerScene = make_unique<LeftWinnerScene>();
+          winnerScene->position.x = -76.99f;
+          winnerScene->position.y = 1.29f;
+          winnerScene->position.z = -5.0f;
 
-      scene.objects.push_back(move(winnerScene));
+          scene.objects.push_back(move(winnerScene));
+      }
+
   }
 
   void initGameScene() {
