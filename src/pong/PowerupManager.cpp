@@ -64,7 +64,7 @@ std::unique_ptr<Object> PowerupManager::getPowerUp(vec3 spawnPosition, int numbe
             auto powerup2 = make_unique<QuakePU>();
             powerup2->position = spawnPosition;
             powerup2->duration = linearRand(7.5f, 10.0f);
-            powerup2->effectDuration = linearRand(15.0f, 20.0f);
+            powerup2->effectDuration = linearRand(12.5f, 15.0f);
             return powerup2;
         }
         case 2: {
