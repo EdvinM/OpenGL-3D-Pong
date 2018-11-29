@@ -21,7 +21,7 @@ vector<tinyobj::material_t> border::material;
 border::border() {
 
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-    if (!texture) texture = make_unique<Texture>(image::loadBMP("sphere.bmp"));
+    if (!texture) texture = make_unique<Texture>(image::loadBMP("Sand-2.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("uvmappedcube.obj");
 
     //Load mtl files
