@@ -23,6 +23,9 @@ private:
     // Age of the object in seconds
     float age{0.0f};
 
+    bool picked;
+    int magnifiedPlayerId;
+
 public:
     Magnify();
 

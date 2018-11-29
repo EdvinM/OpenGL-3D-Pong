@@ -35,23 +35,51 @@ Magnify::Magnify() {
 
     this->age = 0.0f;
     this->duration = 5.0f;
+    this->picked = false;
+    this->magnifiedPlayerId = 0;
 }
 
 bool Magnify::update(Scene &scene, float dt) {
     age += dt;
 
-    if(this->age > this->duration)
+    if(!picked && this->age > this->duration)
         return false;
 
-    for (auto &obj : scene.objects) {
-        if (obj.get() == this) continue;
+    if(!picked) {
+        for (auto &obj : scene.objects) {
+            if (obj.get() == this) continue;
 
-        auto ball = dynamic_cast<Ball*>(obj.get());
+            auto ball = dynamic_cast<Ball *>(obj.get());
 
-        if(!ball) continue;
+            if (!ball) continue;
 
-        if(distance(position, ball->position) <= (scale.x * 2.5)) {
+            if (distance(position, ball->position) <= (scale.x * 4.0) && !picked) {
 
+                for (auto &obj : scene.objects) {
+                    if (obj.get() == this) continue;
+
+                    auto player = dynamic_cast<Player *>(obj.get());
+
+                    if (!player) continue;
+
+                    if (player->pos == ball->lastHitByPlayerId) {
+                        player->scale.x *= 2.0f;
+                        player->scale.y *= 2.0f;
+
+                        //Destroy this attribute
+                        this->picked = true;
+                        this->magnifiedPlayerId = player->pos;
+                        this->effectDuration += this->age;
+                        break;
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+    else {
+        if(this->age > this->effectDuration) {
             for (auto &obj : scene.objects) {
                 if (obj.get() == this) continue;
 
@@ -59,17 +87,16 @@ bool Magnify::update(Scene &scene, float dt) {
 
                 if (!player) continue;
 
-                if(player->pos == ball->lastHitByPlayerId) {
-                    player->scale.x *= 2.0f;
-                    player->scale.y *= 2.0f;
+                if(player->pos == this->magnifiedPlayerId) {
+                    player->scale.x /= 2.0f;
+                    player->scale.y /= 2.0f;
 
-                    //Destroy this attribute
+                    //Delete this object after effect expiration
+                    this->picked = false;
                     this->age += this->duration * 2;
                     break;
                 }
             }
-
-            break;
         }
     }
 
@@ -78,25 +105,29 @@ bool Magnify::update(Scene &scene, float dt) {
 }
 
 void Magnify::render(Scene &scene) {
-    vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
-    vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
-    vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
-    float shininess = material.data()->shininess * 128;
 
-    shader->use();
-    shader->setUniform("LightDirection", scene.lightDirection);
-    shader->setUniform("LightColor", scene.lightColor);
-    shader->setUniform("AmbientLightColor", scene.ambientLightColor);
-    shader->setUniform("CameraPosition", scene.camera->position);
-    shader->setUniform("ModelMatrix", modelMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
+    if(!picked) {
+        vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
+        vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2],
+                            1.0f);
+        vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
+        float shininess = material.data()->shininess * 128;
 
-    shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
-    shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
-    shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
-    shader->setUniform("MaterialShininess", shininess);
+        shader->use();
+        shader->setUniform("LightDirection", scene.lightDirection);
+        shader->setUniform("LightColor", scene.lightColor);
+        shader->setUniform("AmbientLightColor", scene.ambientLightColor);
+        shader->setUniform("CameraPosition", scene.camera->position);
+        shader->setUniform("ModelMatrix", modelMatrix);
+        shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+        shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
 
-    shader->setUniform("Texture", *texture);
-    mesh->render();
+        shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
+        shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
+        shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
+        shader->setUniform("MaterialShininess", shininess);
+
+        shader->setUniform("Texture", *texture);
+        mesh->render();
+    }
 }

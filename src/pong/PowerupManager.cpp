@@ -44,7 +44,7 @@ bool PowerupManager::update(Scene &scene, float dt) {
         //Generate spawn position for the attribute
         vec3 spawnPosition = {linearRand(-10.0f, 10.0f), linearRand(-10.0f, 10.0f), -0.05f};
 
-        scene.objects.push_back(getPowerUp(spawnPosition, 4));
+        scene.objects.push_back(getPowerUp(spawnPosition, 0));
     }
 
     return true;
@@ -57,13 +57,14 @@ std::unique_ptr<Object> PowerupManager::getPowerUp(vec3 spawnPosition, int numbe
             powerup->position = spawnPosition;
             powerup->scale *= 0.5f;
             powerup->duration = linearRand(4.5f, 6.0f);
-
+            powerup->effectDuration = linearRand(25.0f, 30.0f);
             return powerup;
         }
         case 1: {
             auto powerup2 = make_unique<QuakePU>();
             powerup2->position = spawnPosition;
-            powerup2->duration = linearRand(3.5f, 5.0f);
+            powerup2->duration = linearRand(7.5f, 10.0f);
+            powerup2->effectDuration = linearRand(15.0f, 20.0f);
             return powerup2;
         }
         case 2: {

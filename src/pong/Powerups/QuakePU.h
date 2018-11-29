@@ -8,6 +8,7 @@
 
 #include "../scene.h"
 #include "../object.h"
+#include "../Ball.h"
 
 class QuakePU : public Object {
 private:
@@ -22,6 +23,8 @@ private:
 
     // Age of the object in seconds
     float age{0.0f};
+
+    bool picked;
 
 public:
     QuakePU();

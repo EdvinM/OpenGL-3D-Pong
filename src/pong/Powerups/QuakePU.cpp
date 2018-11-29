@@ -33,6 +33,7 @@ QuakePU::QuakePU() {
 
     this->age = 0.0f;
     this->duration = 5.0f;
+    this->picked = false;
 }
 
 bool QuakePU::update(Scene &scene, float dt) {
@@ -40,33 +41,59 @@ bool QuakePU::update(Scene &scene, float dt) {
 
     this->rotation = {0.0f, age, 0.0f};
 
-    if(this->age > this->duration)
+    if(!picked && this->age > this->duration)
         return false;
+
+    if(picked && this->age > this->effectDuration)
+        return false;
+
+    if(!picked) {
+        for (auto &obj : scene.objects) {
+            if (obj.get() == this) continue;
+
+            auto ball = dynamic_cast<Ball *>(obj.get());
+
+            if (!ball) continue;
+
+            if (distance(position, ball->position) <= (scale.x * 1.5)) {
+                picked = true;
+                this->effectDuration += this->age;
+                break;
+            }
+        }
+    }
+    else {
+        scene.camera->position.x = cos(this->age * this->age);
+    }
 
     generateModelMatrix();
     return true;
 }
 
 void QuakePU::render(Scene &scene) {
-    vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
-    vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
-    vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
-    float shininess = material.data()->shininess * 128;
 
-    shader->use();
-    shader->setUniform("LightDirection", scene.lightDirection);
-    shader->setUniform("LightColor", scene.lightColor);
-    shader->setUniform("AmbientLightColor", scene.ambientLightColor);
-    shader->setUniform("CameraPosition", scene.camera->position);
-    shader->setUniform("ModelMatrix", modelMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
+    if(!picked) {
+        vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
+        vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
+        vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
+        float shininess = material.data()->shininess * 128;
 
-    shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
-    shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
-    shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
-    shader->setUniform("MaterialShininess", shininess);
+        shader->use();
+        shader->setUniform("LightDirection", scene.lightDirection);
+        shader->setUniform("LightColor", scene.lightColor);
+        shader->setUniform("AmbientLightColor", scene.ambientLightColor);
+        shader->setUniform("CameraPosition", scene.camera->position);
+        shader->setUniform("ModelMatrix", modelMatrix);
+        shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+        shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
 
-    shader->setUniform("Texture", *texture);
-    mesh->render();
+        shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
+        shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
+        shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
+        shader->setUniform("MaterialShininess", shininess);
+
+        shader->setUniform("Texture", *texture);
+        mesh->render();
+    }
+
 }

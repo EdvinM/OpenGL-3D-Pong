@@ -50,6 +50,7 @@ public:
   glm::mat4 modelMatrix{1};
 
   float duration;
+  float effectDuration;
 
 protected:
   /*!
