@@ -22,24 +22,21 @@ private:
   static std::vector<tinyobj::material_t> material;
 
     static std::map<std::string, int> material_map;
-  // Delay fire and fire rate
-  float fireDelay{0.0f};
 
-    float fireRate{0.1f};
-    glm::vec3 fireOffset{0.7f,0.0f,0.0f};
   int control_up;
+    bool can_move_up;
 
     int control_down;
-  bool can_move_up;
-
     bool can_move_down;
 
     bool spawnLifes;
 
 public:
-    static std::unique_ptr<ppgso::Texture> texture;
-    int pos;
 
+    static std::unique_ptr<ppgso::Texture> texture;
+
+    int pos;
+    float acceleration{0.0f};
     bool mutex;
 
 public:

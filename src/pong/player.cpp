@@ -49,11 +49,10 @@ Player::Player(Scene &scene, int control_up, int control_down, int position) : P
   }
 
     this->mutex = false;
+  this->acceleration = 0.0f;
 }
 
 bool Player::update(Scene &scene, float dt) {
-  // Fire delay increment
-  fireDelay += dt;
 
   //Updated rendered player lifes
     for (auto& obj : this->lifes) {
@@ -62,9 +61,15 @@ bool Player::update(Scene &scene, float dt) {
 
   // Keyboard controls
   if(scene.keyboard[this->control_up] && this->can_move_up) {
-    position.y += 10 * dt;
+      this->acceleration += dt * 1.25f;
+    position.y += 10 * dt * this->acceleration;
   } else if(scene.keyboard[this->control_down] && this->can_move_down) {
-    position.y -= 10 * dt;
+      this->acceleration += dt * 1.25f;
+
+      position.y -= 10 * dt * this->acceleration;
+  }
+  else {
+      this->acceleration = 1.3f;
   }
 
   for (auto &obj : scene.objects) {

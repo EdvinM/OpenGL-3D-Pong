@@ -116,7 +116,7 @@ bool Ball::update(Scene &scene, float dt) {
           float angle = atan2(dy, dx);
 
           speed.x *= -1;
-          speed.y = (15.0f * -sin(angle));
+          speed.y = (15.0f * -sin(angle)) * (player->acceleration * 1.5f);
 
           player->mutex = true;
           this->lastHitByPlayerId = player->pos;
