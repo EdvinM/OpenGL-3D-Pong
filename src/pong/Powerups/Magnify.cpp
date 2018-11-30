@@ -26,7 +26,7 @@ Magnify::Magnify() {
 
     // Initialize static resources if needed
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-    if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball.bmp"));
+    //if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("magnifier.obj");
 
     //Load mtl files
@@ -138,7 +138,7 @@ void Magnify::render(Scene &scene) {
         shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
         shader->setUniform("MaterialShininess", shininess);
 
-        shader->setUniform("Texture", *texture);
+        //shader->setUniform("Texture", *texture);
         mesh->render();
     }
 }

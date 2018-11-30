@@ -24,7 +24,7 @@ QuakePU::QuakePU() {
 
     // Initialize static resources if needed
     if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-    if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball.bmp"));
+    //if (!texture) texture = make_unique<Texture>(image::loadBMP("soccerball.bmp"));
     if (!mesh) mesh = make_unique<Mesh>("skull.obj");
 
     //Load mtl files
@@ -94,7 +94,8 @@ void QuakePU::render(Scene &scene) {
         shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
         shader->setUniform("MaterialShininess", shininess);
 
-        shader->setUniform("Texture", *texture);
+        //We don't need texture, because we are using material properties to set it's color
+        //shader->setUniform("Texture", *texture);
         mesh->render();
     }
 
