@@ -67,6 +67,7 @@ bool Player::update(Scene &scene, float dt) {
   // Keyboard controls
   if(scene.keyboard[this->control_up] && this->can_move_up) {
       this->acceleration += dt * 1.25f;
+
     position.y += 10 * dt * this->acceleration;
   } else if(scene.keyboard[this->control_down] && this->can_move_down) {
       this->acceleration += dt * 1.25f;

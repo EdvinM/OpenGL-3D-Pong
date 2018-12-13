@@ -39,9 +39,9 @@ Life::Life(glm::vec3 rotation, glm::vec3 scale, glm::vec3 position) : Life() {
     this->position = position;
 
     addKeyFrame(100, {0, 2.5, 0}, this->scale, this->position);
-    addKeyFrame(100, {0, 5, 0}, this->scale, this->position);
-    addKeyFrame(100, {0, 2.5, 0}, this->scale, this->position);
-    addKeyFrame(100, {0, 0, 0}, this->scale, this->position);
+    addKeyFrame(150, {0, 5, 0}, this->scale, this->position);
+    addKeyFrame(400, {0, 2.5, 0}, this->scale, this->position);
+    addKeyFrame(450, {0, 0, 0}, this->scale, this->position);
 }
 
 bool Life::update(Scene &scene, float dt) {
