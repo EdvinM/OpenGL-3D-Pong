@@ -117,11 +117,6 @@ bool Magnify::update(Scene &scene, float dt) {
 void Magnify::render(Scene &scene) {
 
     if(!picked) {
-        vec3 ambient = vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]);
-        vec4 diffuse = vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f);
-        vec3 specular = vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]);
-        float shininess = material.data()->shininess * 128;
-
         shader->use();
         shader->setUniform("LightDirection", scene.lightDirection);
         shader->setUniform("LightColor", scene.lightColor);
@@ -133,10 +128,10 @@ void Magnify::render(Scene &scene) {
         shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
         shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
 
-        shader->setUniform("MaterialAmbient", {ambient.x, ambient.y, ambient.z});
-        shader->setUniform("MaterialDiffuse", {diffuse.x, diffuse.y, diffuse.z, 1.0f});
-        shader->setUniform("MaterialSpecular", {specular.x, specular.y, specular.z});
-        shader->setUniform("MaterialShininess", shininess);
+        shader->setUniform("MaterialAmbient", vec3(material.data()->ambient[0], material.data()->ambient[1], material.data()->ambient[2]));
+        shader->setUniform("MaterialDiffuse", vec4(material.data()->diffuse[0], material.data()->diffuse[1], material.data()->diffuse[2], 1.0f));
+        shader->setUniform("MaterialSpecular", vec3(material.data()->specular[0], material.data()->specular[1], material.data()->specular[2]));
+        shader->setUniform("MaterialShininess", (material.data()->shininess * 128));
 
         //shader->setUniform("Texture", *texture);
         mesh->render();
