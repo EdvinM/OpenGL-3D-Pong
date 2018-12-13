@@ -10,10 +10,10 @@ uniform vec3 LightColor2;
 uniform vec3 AmbientLightColor;
 
 //Material Properties
-uniform vec3 MaterialAmbient;
-uniform vec4 MaterialDiffuse;
-uniform vec3 MaterialSpecular;
-uniform float MaterialShininess;
+uniform vec3 Ambient;
+uniform vec4 Diffuse;
+uniform vec3 Specular;
+uniform float Shininess;
 
 //camera pos
 uniform vec3 CameraPosition;
@@ -42,11 +42,11 @@ vec4 processFragmentColor(vec3 lightDirection, vec3 lightColor) {
   //Calculate the specular color
   vec3 ViewDirection = normalize(CameraPosition);
   vec3 ReflectionDirection = reflect(-lightDirection, normal.xyz);
-  float SpecularFactor = pow(max(dot(ViewDirection, ReflectionDirection), 0.0), MaterialShininess);
-  vec3 SpecularColor = vec3(SpecularFactor) * lightColor * MaterialSpecular;
+  float SpecularFactor = pow(max(dot(ViewDirection, ReflectionDirection), 0.0), Shininess);
+  vec3 SpecularColor = vec3(SpecularFactor) * lightColor * Specular;
 
   //Finalize the light's color contribution
-  vec4 LightFragmentColor = ObjectTextureColor * vec4(LightDiffuseFactor) * vec4(lightColor.rgb,1.0) * MaterialDiffuse;
+  vec4 LightFragmentColor = ObjectTextureColor * vec4(LightDiffuseFactor) * vec4(lightColor.rgb,1.0) * Diffuse;
 
     //combine all the light colors with the scene's ambient color
   return vec4(SpecularColor,1.0) + (LightFragmentColor);
@@ -54,7 +54,7 @@ vec4 processFragmentColor(vec3 lightDirection, vec3 lightColor) {
 
 void main() {
   // Create first values for fragment color with first light
-  FragmentColor = vec4(AmbientLightColor * MaterialAmbient, 1.0) + processFragmentColor(LightDirection, LightColor);
+  FragmentColor = vec4(AmbientLightColor * Ambient, 1.0) + processFragmentColor(LightDirection, LightColor);
 
   // Add values computed for the second light to fragment
   FragmentColor +=  processFragmentColor(LightDirection2, LightColor2);
