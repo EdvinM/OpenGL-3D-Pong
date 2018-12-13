@@ -40,10 +40,11 @@ vec4 processFragmentColor(vec3 lightDirection, vec3 lightColor) {
   float LightDiffuseFactor = max(dot(normal, vec4(normalize(lightDirection), 1.0f)), 0.0f);
 
   //Calculate the specular color
-  vec3 ViewDirection = normalize(CameraPosition);
+  vec3 ViewDirection = normalize(CameraPosition - worldPosition);
   vec3 ReflectionDirection = reflect(-lightDirection, normal.xyz);
   float SpecularFactor = pow(max(dot(ViewDirection, ReflectionDirection), 0.0), Shininess);
-  vec3 SpecularColor = vec3(SpecularFactor) * lightColor * Specular;
+  float specularStrength = 0.1;
+  vec3 SpecularColor = vec3(specularStrength) * vec3(SpecularFactor) * lightColor * Specular;
 
   //Finalize the light's color contribution
   vec4 LightFragmentColor = ObjectTextureColor * vec4(LightDiffuseFactor) * vec4(lightColor.rgb,1.0) * Diffuse;
